@@ -32,9 +32,9 @@ public class Seeder implements CommandLineRunner {
 		Character ciri = new Character("Hammer", mage, 1, "stick");
 		
 		// create new users
-		User admin = new User("admin", "omgwtf", 0, Arrays.asList());
-		User katja = new User("katja", "123", 1,  Arrays.asList(drucilla, hammer));
-		User tudor = new User("tudor", "123", 1,  Arrays.asList(ciri));
+		User admin = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "admin", Arrays.asList());
+		User katja = new User("katja", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "user",  Arrays.asList(drucilla, hammer));
+		User tudor = new User("tudor", "123", "user",  Arrays.asList(ciri));
 		
 		// drop all previous users, if any
 		this.userRepo.deleteAll();

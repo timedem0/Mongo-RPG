@@ -1,6 +1,6 @@
 package fi.haagahelia.course.morpg.domain;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -20,15 +20,20 @@ public class User {
 	@Field
 	private String password;
 	@Field
-	private int role;
+	private String role;
 	@Field
 	private List<Character> characters;
 	
+	/*
 	protected User() {
 		this.characters = new ArrayList<>();
 	}
+	*/
+	
+    public User() {
+    }
 
-	public User(String name, String password, int role, List<Character> characters) {
+	public User(String name, String password, String role, List<Character> characters) {
 		this.name = name;
 		this.password = password;
 		this.role = role;
@@ -55,11 +60,11 @@ public class User {
 		this.password = password;
 	}
 
-	public int getRole() {
+	public String getRole() {
 		return role;
 	}
 
-	public void setRole(int role) {
+	public void setRole(String role) {
 		this.role = role;
 	}
 

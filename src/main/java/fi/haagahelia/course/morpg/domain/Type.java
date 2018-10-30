@@ -1,8 +1,10 @@
 package fi.haagahelia.course.morpg.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+@Document(collection = "Types")
 public class Type {
 	@Id
 	@Field
@@ -17,6 +19,10 @@ public class Type {
 	private String vulnerability;
 	@Field
 	private String terrain;
+	
+	public Type() {
+		
+	}
 	
 	public Type(String typeName, int attack, int defence, String attackType, String vulnerability, String terrain) {
 		this.typeName = typeName;

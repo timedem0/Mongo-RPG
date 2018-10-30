@@ -7,15 +7,18 @@ import org.springframework.stereotype.Component;
 
 import fi.haagahelia.course.morpg.domain.Character;
 import fi.haagahelia.course.morpg.domain.Type;
+import fi.haagahelia.course.morpg.domain.TypeRepository;
 import fi.haagahelia.course.morpg.domain.User;
 import fi.haagahelia.course.morpg.domain.UserRepository;
 
 @Component
 public class Seeder implements CommandLineRunner {
 	private UserRepository userRepo;
+	private TypeRepository typeRepo;
 
-	public Seeder(UserRepository userRepo) {
+	public Seeder(UserRepository userRepo, TypeRepository typeRepo) {
 		this.userRepo = userRepo;
+		this.typeRepo = typeRepo;
 	}
 
 	@Override
@@ -27,21 +30,23 @@ public class Seeder implements CommandLineRunner {
 		Type mage = new Type("Mage", 70, 20, "fire", "nature", "city");
 		
 		// create new characters
-		Character drucilla = new Character("Drucilla", druid, 1, "none");
-		Character hammer = new Character("Hammer", warrior, 1, "none");
-		Character ciri = new Character("Hammer", mage, 1, "stick");
+		Character drucilla = new Character("Drucilla", druid.getTypeName(), 1, "none", false);
+		Character hammer = new Character("Doomhammer", warrior.getTypeName(), 1, "Hammer of Justice", false);
+		Character ciri = new Character("Ciri", mage.getTypeName(), 1, "Staff of the World Tree", false);
 		
 		// create new users
-		User admin = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "admin", Arrays.asList());
-		User katja = new User("katja", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "user",  Arrays.asList(drucilla, hammer));
-		User tudor = new User("tudor", "123", "user",  Arrays.asList(ciri));
+		User admin = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN", Arrays.asList(ciri));
+		User user = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",  Arrays.asList(drucilla, hammer, ciri));
 		
-		// drop all previous users, if any
+		// drop all previous users and types, if any
+		this.typeRepo.deleteAll();
 		this.userRepo.deleteAll();
 		
 		// add the users to the database
+		this.typeRepo.save(druid);
+		this.typeRepo.save(warrior);
+		this.typeRepo.save(mage);
 		this.userRepo.save(admin);
-		this.userRepo.save(katja);
-		this.userRepo.save(tudor);
+		this.userRepo.save(user);
 	}	
 }

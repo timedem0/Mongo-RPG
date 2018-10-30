@@ -8,17 +8,24 @@ public class Character {
 	@Field
 	private String charName;
 	@Field
-	private Type type;
+	private String type;
 	@Field
 	private int level;
 	@Field
 	private String weapon;
+	@Field
+	private boolean isDeleted;
 	
-	public Character(String charName, Type type, int level, String weapon) {
+	public Character() {
+		
+	}
+	
+	public Character(String charName, String type, int level, String weapon, boolean isDeleted) {
 		this.charName = charName;
 		this.type = type;
 		this.level = level;
 		this.weapon = weapon;
+		this.isDeleted = isDeleted;
 	}
 
 	public String getCharName() {
@@ -29,11 +36,11 @@ public class Character {
 		this.charName = charName;
 	}
 
-	public Type getType() {
+	public String getType() {
 		return type;
 	}
 
-	public void setTypeName(Type type) {
+	public void setTypeName(String type) {
 		this.type = type;
 	}
 
@@ -53,4 +60,11 @@ public class Character {
 		this.weapon = weapon;
 	}
 	
+	public boolean getIsDeleted() {
+		return isDeleted;
+	}
+
+	public void setIsDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 }

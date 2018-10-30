@@ -10,14 +10,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fi.haagahelia.course.morpg.domain.UserRepository;
-import fi.haagahelia.course.morpg.domain.CharacterRepository;
-import fi.haagahelia.course.morpg.domain.SignForm;
 import fi.haagahelia.course.morpg.domain.User;
+import fi.haagahelia.course.morpg.domain.UserRepository;
+import fi.haagahelia.course.morpg.domain.UserRepositoryCustom;
+import fi.haagahelia.course.morpg.domain.Character;
+import fi.haagahelia.course.morpg.domain.TypeRepository;
+import fi.haagahelia.course.morpg.domain.SignForm;
 
 @Controller
 public class MorpgController {
@@ -26,7 +29,10 @@ public class MorpgController {
 	private UserRepository userRepo;
 	
 	@Autowired
-	private CharacterRepository charRepo;
+	private UserRepositoryCustom userRepoCustom;
+	
+	@Autowired
+	private TypeRepository typeRepo;
 	
 	// Security and User Creation
 	
@@ -57,7 +63,7 @@ public class MorpgController {
 		    	User newUser = new User();
 		    	newUser.setPassword(hashPwd);
 		    	newUser.setName(signForm.getName());
-		    	newUser.setRole("user");
+		    	newUser.setRole("USER");
 		    	if (userRepo.findByName(signForm.getName()) == null) { // check if user exists
 		    		userRepo.save(newUser);
 		    	}
@@ -81,10 +87,41 @@ public class MorpgController {
     
 	@RequestMapping(value = "/main")
     public String charList(Model model) {	
-        model.addAttribute("characters", charRepo.findAll());
+        model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("types", typeRepo.findAll());
         return "main";
     }
     
+    @RequestMapping(value = "/create")
+    public String addCharacter(Model model) {
+    	
+    	// model.addAttribute("char", new Character());
+    	// model.addAttribute("types", typeRepo.findAll());
+    	
+        return "charactercreate";
+    }
+ 
+    @RequestMapping(value = "/edit/{userName}/{charName}", method = RequestMethod.GET)
+    public String editCharacter(@PathVariable("userName") String userId, @PathVariable("charName") String charName, Model model) {
+
+    	// model.addAttribute("user", userRepo.findById(userId));
+    	// model.addAttribute("types", typeRepo.findAll());
+    	
+    	// List<User> users = null;
+		// users = userRepo.findByCharName(charName);
+		// System.out.println("==========New Test:==========");
+		// users.forEach(System.out::println);
+    	// System.out.println(userName + ' ' + charName);
+    	
+        return "characteredit";
+    }
+    
+    @RequestMapping(value = "/delete/{userName}/{charName}", method = RequestMethod.GET)
+    public String deleteCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, Model model) {
+    	
+    	userRepoCustom.deleteChar(userName, charName);    	
+        return "redirect:../../main";
+    }
     
     // RESTful services
     

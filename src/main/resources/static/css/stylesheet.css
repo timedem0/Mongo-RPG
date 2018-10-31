@@ -1,0 +1,55 @@
+
+.site {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    font-family: 'Muli', sans-serif;
+}
+
+h1 {
+	font-family: 'Nothing You Could Do', cursive;
+	font-weight: bold;
+	text-align: center;
+}
+
+.top {
+    margin-top: 4em;
+    padding-bottom: 4em;
+}
+
+.smaller-text {
+	font-size: .7em;
+}
+
+.big-holder {
+    padding: 3em;
+    background-color: #e3f2fd;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+	background-color: #e3f2fd;
+}
+
+.form-signin {
+	background-color: #e3f2fd;
+	width: 100%;
+	max-width: 330px;
+	padding: 15px;
+	margin: auto;
+}
+
+.form-signin .form-control {
+	position: relative;
+	box-sizing: border-box;
+	height: auto;
+	padding: 10px;
+}
+
+.form-signout {
+	display: inline!important;
+}
+
+.form-error {
+	color: darkred;
+}

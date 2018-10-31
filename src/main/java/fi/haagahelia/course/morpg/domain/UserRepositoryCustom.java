@@ -5,6 +5,9 @@ import java.util.List;
 public interface UserRepositoryCustom {
 	
 	public List<User> testQuery(String name);
+	
 	public long deleteChar(String userName, String charName);
+	
+	public List<User> getEdit(String userName, String charName);
 	
 }

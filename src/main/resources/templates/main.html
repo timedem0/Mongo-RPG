@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../css/stylesheet.css" />
 </head>
 
 <body>
@@ -50,13 +49,13 @@
                     </td>
                     <td th:text="${j.weapon}"></td>     
                     <td><a th:href="@{/delete/{userName}/{charName}(userName=${i.name},charName=${j.charName})}">Delete</a></td>
-                    <td><a th:href="@{/edit/{userid}/{id}(userid=${#httpServletRequest.remoteUser},id=${j.charName})}">Edit</a></td>
+                    <td><a th:href="@{/edit/{userName}/{charName}(userName=${i.name},charName=${j.charName})}">Edit</a></td>
                 </tr>
             </tbody>
             
         </table>
         
-        <a href="/create">Create New Character</a><br />
+        <a th:href="@{/create/{userId}/{charName}(userId=${#httpServletRequest.remoteUser},charName=${#httpServletRequest.remoteUser})}">Create New Character</a><br />
         <a sec:authorize="hasAuthority('ADMIN')" href="/monsters">Create New Monster</a><br />
         <a sec:authorize="hasAuthority('ADMIN')" href="/users" target="_blank">See User JSON</a><br />
         

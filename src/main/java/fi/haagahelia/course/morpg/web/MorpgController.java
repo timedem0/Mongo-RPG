@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import fi.haagahelia.course.morpg.domain.User;
 import fi.haagahelia.course.morpg.domain.UserRepository;
 import fi.haagahelia.course.morpg.domain.UserRepositoryCustom;
-import fi.haagahelia.course.morpg.domain.Character;
 import fi.haagahelia.course.morpg.domain.TypeRepository;
 import fi.haagahelia.course.morpg.domain.SignForm;
 
@@ -91,37 +90,48 @@ public class MorpgController {
         model.addAttribute("types", typeRepo.findAll());
         return "main";
     }
-    
-    @RequestMapping(value = "/create")
-    public String addCharacter(Model model) {
-    	
-    	// model.addAttribute("char", new Character());
-    	// model.addAttribute("types", typeRepo.findAll());
-    	
-        return "charactercreate";
-    }
- 
+     
     @RequestMapping(value = "/edit/{userName}/{charName}", method = RequestMethod.GET)
-    public String editCharacter(@PathVariable("userName") String userId, @PathVariable("charName") String charName, Model model) {
+    public String editCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, Model model) {
 
-    	// model.addAttribute("user", userRepo.findById(userId));
-    	// model.addAttribute("types", typeRepo.findAll());
+    	model.addAttribute("user", userRepoCustom.getEdit(userName, charName));
+    	model.addAttribute("types", typeRepo.findAll());
     	
+    	System.out.println("==========New Test:==========");
+    	System.out.println("user name = " + userName + ", char name = " + charName);
+    	// User test = userRepo.findByName(userName);
     	// List<User> users = null;
-		// users = userRepo.findByCharName(charName);
+		// users = userRepoCustom.getEdit(userName, charName);
 		// System.out.println("==========New Test:==========");
 		// users.forEach(System.out::println);
     	// System.out.println(userName + ' ' + charName);
     	
-        return "characteredit";
+    	return "characteredit";
     }
-    
+        
     @RequestMapping(value = "/delete/{userName}/{charName}", method = RequestMethod.GET)
     public String deleteCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, Model model) {
     	
-    	userRepoCustom.deleteChar(userName, charName);    	
+    	userRepoCustom.deleteChar(userName, charName);
         return "redirect:../../main";
     }
+    
+    /* WORK IN PROGRESS PAST THIS POINT
+    
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String updateCharacter(User user) {
+    	return "redirect:../../main";
+    }
+    
+    @RequestMapping(value = "/create/{userName}/{charName}")
+    public String addCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, Model model) {
+    	
+    	// model.addAttribute("char", new Character());
+    	// model.addAttribute("types", typeRepo.findAll());
+    	System.out.println("test");
+        return "charactercreate";
+    }
+    */
     
     // RESTful services
     

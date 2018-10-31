@@ -53,4 +53,16 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
  
         return 0;
     }
+    
+    public List<User> getEdit (String userName, String charName) {
+ 	   
+        Query query = new Query(new Criteria().andOperator(
+        		  Criteria.where("name").is(userName),
+        		  Criteria.where("characters").elemMatch(Criteria.where("charName").is(charName))
+        		));
+        
+        List<User> userToEdit = mongoTemplate.find(query,User.class);
+        
+        return userToEdit;
+    }
 }

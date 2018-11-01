@@ -55,7 +55,7 @@
             
         </table>
         
-        <a th:href="@{/create/{userId}/{charName}(userId=${#httpServletRequest.remoteUser},charName=${#httpServletRequest.remoteUser})}">Create New Character</a><br />
+        <a th:href="@{/create/{userName}(userName=${#httpServletRequest.remoteUser})}">Create New Character</a><br />
         <a sec:authorize="hasAuthority('ADMIN')" href="/monsters">Create New Monster</a><br />
         <a sec:authorize="hasAuthority('ADMIN')" href="/users" target="_blank">See User JSON</a><br />
         

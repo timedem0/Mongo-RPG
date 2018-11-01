@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fi.haagahelia.course.morpg.domain.User;
 import fi.haagahelia.course.morpg.domain.UserRepository;
 import fi.haagahelia.course.morpg.domain.UserRepositoryCustom;
+import fi.haagahelia.course.morpg.domain.Character;
 import fi.haagahelia.course.morpg.domain.TypeRepository;
 import fi.haagahelia.course.morpg.domain.SignForm;
 
@@ -33,7 +35,7 @@ public class MorpgController {
 	@Autowired
 	private TypeRepository typeRepo;
 	
-	// Security and User Creation
+	// security and user creation
 	
     @RequestMapping(value = {"/index", "/", "/login"})
     public String login() {	
@@ -63,75 +65,89 @@ public class MorpgController {
 		    	newUser.setPassword(hashPwd);
 		    	newUser.setName(signForm.getName());
 		    	newUser.setRole("USER");
+		    	
 		    	if (userRepo.findByName(signForm.getName()) == null) { // check if user exists
 		    		userRepo.save(newUser);
-		    	}
-		    	else {
+		    	} else {
 	    			bindingResult.rejectValue("name", "err.name", "Username already exists");    	
 	    			return "signup";		    		
 		    	}
-    		}
-    		else {
+    		} else {
     			bindingResult.rejectValue("passwordCheck", "err.passCheck", "Passwords does not match");    	
     			return "signup";
     		}
-    	}
-    	else {
+    	} else {
     		return "signup";
     	}
     	return "redirect:/success";    	
     }    
     
-    // Main pages
+    // MAIN pages
     
+    // character list
 	@RequestMapping(value = "/main")
-    public String charList(Model model) {	
+    public String charList(Model model) {
+		
         model.addAttribute("users", userRepo.findAll());
         model.addAttribute("types", typeRepo.findAll());
+        
         return "main";
     }
-     
-    @RequestMapping(value = "/edit/{userName}/{charName}", method = RequestMethod.GET)
-    public String editCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, Model model) {
-
-    	model.addAttribute("user", userRepoCustom.getEdit(userName, charName));
+	
+	// character creation page
+    @RequestMapping(value = "/create/{userName}")
+    public String addCharacter(@PathVariable("userName") String userName, Model model) {
+    	
+    	model.addAttribute("newChar", new Character());
+    	model.addAttribute("userName", userName);
     	model.addAttribute("types", typeRepo.findAll());
-    	
-    	System.out.println("==========New Test:==========");
-    	System.out.println("user name = " + userName + ", char name = " + charName);
-    	// User test = userRepo.findByName(userName);
-    	// List<User> users = null;
-		// users = userRepoCustom.getEdit(userName, charName);
-		// System.out.println("==========New Test:==========");
-		// users.forEach(System.out::println);
-    	// System.out.println(userName + ' ' + charName);
-    	
-    	return "characteredit";
+
+        return "charactercreate";
     }
-        
+    
+    // character save function
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String saveCharacter(String userName, Character charToCreate, RedirectAttributes ra) {
+	  	    	
+	    	if (userRepoCustom.findCharByName(userName, charToCreate.getCharName()) == null) { // check if character name exists
+	    		userRepoCustom.insertChar(userName, charToCreate);
+	    	} else {
+    	        ra.addFlashAttribute("errorMessage", "Character already exists");
+    			return "redirect:create/" + userName;		    		
+	    	}
+	    	
+    	return "redirect:main";
+    }
+	
+	// character delete
     @RequestMapping(value = "/delete/{userName}/{charName}", method = RequestMethod.GET)
     public String deleteCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, Model model) {
     	
     	userRepoCustom.deleteChar(userName, charName);
+    	
         return "redirect:../../main";
     }
     
-    /* WORK IN PROGRESS PAST THIS POINT
-    
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updateCharacter(User user) {
-    	return "redirect:../../main";
-    }
-    
-    @RequestMapping(value = "/create/{userName}/{charName}")
-    public String addCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, Model model) {
+    // character edit page
+    @RequestMapping(value = "/edit/{userName}/{charName}", method = RequestMethod.GET)
+    public String editCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, Model model) {
     	
-    	// model.addAttribute("char", new Character());
-    	// model.addAttribute("types", typeRepo.findAll());
-    	System.out.println("test");
-        return "charactercreate";
+    	Character charToEdit = userRepoCustom.findCharByName(userName, charName);
+    	model.addAttribute("charToEdit", charToEdit);
+    	model.addAttribute("userName", userName);
+    	model.addAttribute("types", typeRepo.findAll());
+    	   
+    	return "characteredit";
     }
-    */
+    
+    // character update function
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public String updateCharacter(String userName, Character charToEdit) {
+    	
+    	userRepoCustom.updateChar(userName, charToEdit);
+    	
+    	return "redirect:main";
+    }         
     
     // RESTful services
     
@@ -139,5 +155,15 @@ public class MorpgController {
     public @ResponseBody List<User> getAllUsers () {
     	return (List<User>) userRepo.findAll();
     }
-
 }
+
+// Testing purposes
+// System.out.println("==========New Test:==========");
+// System.out.println("user name = " + userName + ", char name = " + charName);
+// User test = userRepo.findByName(userName);
+// User user = userRepo.findByName(userName);
+// System.out.println(userName);
+// System.out.println(charToEdit);
+// System.out.println("==========New Test:==========");
+// users.forEach(System.out::println);
+// System.out.println(userName + ' ' + charName);

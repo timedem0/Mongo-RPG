@@ -1,7 +1,5 @@
 package fi.haagahelia.course.morpg.domain;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -17,24 +15,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	@Autowired
     MongoTemplate mongoTemplate;
 	
-    public List<User> testQuery (String nameGet) {
-    	
-        Query query = new Query(Criteria.where("name").is(nameGet));
-        List<User> users = mongoTemplate.find(query,User.class);
-        
-        return users;
-        
-        /*
-        Update update = new Update();
-        update.set("fullName", fullName);
-        update.set("hireDate", hireDate);
-         
- 
-        UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
-        
-       */
-    }
-    
     public long deleteChar (String userName, String charName) {
     	   
         Query query = new Query(new Criteria().andOperator(
@@ -54,15 +34,62 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         return 0;
     }
     
-    public List<User> getEdit (String userName, String charName) {
- 	   
+    public long insertChar (String userName, Character newChar) {
+ 	       
+        Query query = new Query(Criteria.where("name").is(userName));
+        
+        Update update = new Update();
+        update.push("characters", newChar);
+ 
+        UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
+ 
+        if (result != null) {
+            return result.getModifiedCount();
+        }
+ 
+        return 0;
+    }
+     
+    public Character findCharByName(String userName, String charName) {
+    	
         Query query = new Query(new Criteria().andOperator(
-        		  Criteria.where("name").is(userName),
-        		  Criteria.where("characters").elemMatch(Criteria.where("charName").is(charName))
-        		));
+      		  Criteria.where("name").is(userName),
+      		  Criteria.where("characters").elemMatch(Criteria.where("charName").is(charName))
+      		));
         
-        List<User> userToEdit = mongoTemplate.find(query,User.class);
+        User user = new User();
+        Character charToEdit = new Character();
         
-        return userToEdit;
+    	user = mongoTemplate.findOne((query), User.class);
+    	
+    	if (user == null) {
+    		return null;
+    	} else {
+    		charToEdit = user.getCharByName(charName);
+    		return charToEdit;
+    	}
+    }
+    
+    public long updateChar(String userName, Character charToEdit) {
+    	
+        Query query = new Query(new Criteria().andOperator(
+      		  Criteria.where("name").is(userName),
+      		  Criteria.where("characters").elemMatch(Criteria.where("charName").is(charToEdit.getCharName()))
+      		));
+        
+        Update update = new Update();
+        // update.set("characters.$.charName", charToEdit.getCharName());
+        update.set("characters.$.weapon", charToEdit.getWeapon());
+        update.set("characters.$.type", charToEdit.getType());
+        update.set("characters.$.level", charToEdit.getLevel());
+        update.set("characters.$.isDeleted", false);
+ 
+        UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
+ 
+        if (result != null) {
+            return result.getModifiedCount();
+        }
+ 
+        return 0;
     }
 }

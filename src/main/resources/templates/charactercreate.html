@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/stylesheet.css" />
 </head>
 
 <body>
@@ -23,43 +24,39 @@
 		<h1>Character Creation</h1>
 		<br />
 		
-		<!-- 
 		<div>
 		
-			<form th:object="${char}" th:action="@{save}" action="#" method="post">	
+			<form th:object="${newChar}" th:with="myUser=${userName}" th:action="@{../save}" action="#" method="post">	
 
 				<div>
-				  	<label for="name">Name</label>
-					<input type="text" id="name" placeholder="Character name" th:field="*{charName}" required />
+				  	<label for="charName">Character Name: </label>
+					<input type="text" id="charName" placeholder="" th:field="${newChar.charName}" required />
+				</div>
+				<div th:text=${errorMessage}></div>
+				<div role="alert" th:if="${#fields.hasErrors('charName')}" th:errors="*{charName}">Username Error</div>
+				<div>
+				  	<label for="weapon">Weapon: </label>
+					<input type="text" id="weapon" placeholder="" th:field="${newChar.weapon}" required />
 				</div>
 				<div>
-				  	<label for="level">Level</label>
-					<input type="text" id="level" placeholder="Character level" th:field="*{level}" required />
-				</div>
-				<div>
-					<label for="weapon">Weapon</label>
-					<input type="text" id="weapon" placeholder="Character weapon" th:field="*{weapon}" required />
-				</div>
-				<div>
-					<label for="type">Class</label>
-					<select id="type" th:field="*{type}">
+					<label for="type">Class: </label>
+					<select id="type" th:field="${newChar.type}">
 						<option th:each="j : ${types}"
 								th:value="${j.typeName}"
 								th:text="${j.typeName}">
 						</option>
 					</select>
 				</div>
+				<input type="hidden" name="userName" th:value="${myUser}" />
 				<div>
 					<a href="/main">Back</a>
 				    <button type="reset">Reset</button>
 				    <input type="submit" value="Save" />
 				</div>
-
+ 				
 			</form>
 		
 		</div>
-		
-		 -->
 	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

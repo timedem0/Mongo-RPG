@@ -79,6 +79,18 @@ public class User {
 		this.characters = characters;
 	}	
 	
+	// method to return a single Character Object from the nested documents of the User Collection
+	public Character getCharByName(String charName) {
+		
+	    for (Character i : characters) {
+	        if (i.getCharName().equals(charName)) {
+	        	return i;
+	        }
+	    }
+	    return null;
+	}
+	
+	// method to return a JSON String
     @Override
     public String toString() {
     	ObjectMapper mapper = new ObjectMapper();

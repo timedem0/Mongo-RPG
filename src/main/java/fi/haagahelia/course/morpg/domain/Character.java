@@ -3,6 +3,10 @@ package fi.haagahelia.course.morpg.domain;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 public class Character {
 	@Id
 	@Field
@@ -10,11 +14,11 @@ public class Character {
 	@Field
 	private String type;
 	@Field
-	private int level;
+	private int level = 1;
 	@Field
 	private String weapon;
 	@Field
-	private boolean isDeleted;
+	private boolean isDeleted = false;
 	
 	public Character() {
 		
@@ -40,7 +44,7 @@ public class Character {
 		return type;
 	}
 
-	public void setTypeName(String type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 
@@ -67,4 +71,19 @@ public class Character {
 	public void setIsDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
+	
+    @Override
+    public String toString() {
+    	ObjectMapper mapper = new ObjectMapper();
+    	
+    	String jsonString = "";
+		try {
+			mapper.enable(SerializationFeature.INDENT_OUTPUT);
+			jsonString = mapper.writeValueAsString(this);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+    	return jsonString;
+    }
 }

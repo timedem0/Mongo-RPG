@@ -1,13 +1,9 @@
 package fi.haagahelia.course.morpg.domain;
 
-import java.util.List;
-
 public interface UserRepositoryCustom {
 	
-	public List<User> testQuery(String name);
-	
 	public long deleteChar(String userName, String charName);
-	
-	public List<User> getEdit(String userName, String charName);
-	
+	public long insertChar(String userName, Character newChar);
+	public Character findCharByName(String userName, String charName);
+	public long updateChar(String userName, Character newChar);
 }

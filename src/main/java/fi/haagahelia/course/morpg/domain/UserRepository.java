@@ -11,6 +11,7 @@ public interface UserRepository extends MongoRepository<User, String> {
 	
 	User findByName(String name);
 	List<User> findByRole(String role);
+    List<User> findByCharacters_CharName(String charName);
 	
 	/*
 	@Query(value="{ 'characters.charName': ?0 }")

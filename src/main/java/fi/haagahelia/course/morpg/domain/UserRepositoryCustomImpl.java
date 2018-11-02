@@ -15,7 +15,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	@Autowired
     MongoTemplate mongoTemplate;
 	
-    public long deleteChar (String userName, String charName) {
+    public long deleteChar(String userName, String charName) {
     	   
         Query query = new Query(new Criteria().andOperator(
         		  Criteria.where("name").is(userName),
@@ -30,11 +30,10 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         if (result != null) {
             return result.getModifiedCount();
         }
- 
         return 0;
     }
     
-    public long insertChar (String userName, Character newChar) {
+    public long insertChar(String userName, Character newChar) {
  	       
         Query query = new Query(Criteria.where("name").is(userName));
         
@@ -78,7 +77,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
       		));
         
         Update update = new Update();
-        // update.set("characters.$.charName", charToEdit.getCharName());
         update.set("characters.$.weapon", charToEdit.getWeapon());
         update.set("characters.$.type", charToEdit.getType());
         update.set("characters.$.level", charToEdit.getLevel());
@@ -89,7 +87,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         if (result != null) {
             return result.getModifiedCount();
         }
- 
         return 0;
     }
 }

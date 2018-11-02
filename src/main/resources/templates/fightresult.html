@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Mongo RPG - Fight Results</title>
+    <meta name="author" content="Tudor Nica">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/stylesheet.css" />
+</head>
+<body>
+
+	<div>
+		<span th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</span>
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out">
+		</form>
+	</div>
+
+	<div>
+	
+		<h1>Fight result</h1>
+		<br />
+	
+		<p th:text=${result}></p>
+		
+		<a th:href="@{/main}">Back to main page</a><br />
+	
+	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	
+</body>

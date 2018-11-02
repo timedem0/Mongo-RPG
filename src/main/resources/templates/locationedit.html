@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <title>Mongo RPG - Character Edit</title>
+    <title>Mongo RPG - Location Edit</title>
     <meta name="author" content="Tudor Nica">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -21,34 +21,27 @@
 	
 	<div>
 
-		<h1>Character Edit</h1>
+		<h1>Location Edit</h1>
 		<br />
 
 		<div>
-			<form th:object="${charToEdit}" th:with="myUser=${userName}" th:action="@{../../update}" action="#" method="post">
+			<form th:object="${locationToEdit}" th:action="@{../../updatelocation}" action="#" method="post">
 			
 				<div>
-				  	<label for="charName">Character Name: </label>
-					<input type="text" id="charName" th:placeholder="${charToEdit.charName}" th:field="${charToEdit.charName}" required readonly />
+					<input type="hidden" id="id" th:placeholder="${locationToEdit.id}" th:field="${locationToEdit.id}" required />
 				</div>
 				<div>
-				  	<label for="level">Level: </label>
-					<input type="text" id="level" th:placeholder="${charToEdit.level}" th:field="${charToEdit.level}" required readonly />
+				  	<label for="name">Location Name: </label>
+					<input type="text" id="name" th:placeholder="${locationToEdit.name}" th:field="${locationToEdit.name}" required />
 				</div>
 				<div>
-					<label for="weapon">Weapon: </label>
-					<input type="text" id="weapon" th:placeholder="${charToEdit.weapon}" th:field="${charToEdit.weapon}" required />
+				  	<label for="description">Description: </label>
+					<input type="text" id="description" th:placeholder="${locationToEdit.description}" th:field="${locationToEdit.description}" required />
 				</div>
 				<div>
-					<label for="type">Class</label>
-					<select id="type" th:field="${charToEdit.type}">
-						<option th:each="j : ${types}"
-								th:value="${j.typeName}"
-								th:text="${j.typeName}">
-						</option>
-					</select>
-				</div>
-				<input type="hidden" name="userName" th:value="${myUser}" />				 
+					<label for="picture">Picture URL: </label>
+					<input type="text" id="picture" th:placeholder="${locationToEdit.picture}" th:field="${locationToEdit.picture}" required />
+				</div>			 
 				<div>
 					<a href="/main">Back</a>
 				    <button type="reset">Reset</button>

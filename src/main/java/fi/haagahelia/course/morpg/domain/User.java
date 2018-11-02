@@ -4,6 +4,7 @@ package fi.haagahelia.course.morpg.domain;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @Document(collection = "Users")
 public class User {
 	@Id
+	@Indexed
 	@Field
 	private String id;
 	@Field
@@ -79,7 +81,7 @@ public class User {
 		this.characters = characters;
 	}	
 	
-	// method to return a single Character Object from the nested documents of the User Collection
+	// method to return a single Character Object from the nested documents of the Users Collection
 	public Character getCharByName(String charName) {
 		
 	    for (Character i : characters) {

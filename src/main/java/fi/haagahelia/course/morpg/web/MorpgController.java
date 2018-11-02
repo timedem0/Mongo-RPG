@@ -3,6 +3,7 @@ package fi.haagahelia.course.morpg.web;
 import java.util.List;
 
 import javax.validation.Valid;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,12 +17,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import fi.haagahelia.course.morpg.logic.Fight;
+import fi.haagahelia.course.morpg.domain.SignForm;
+
 import fi.haagahelia.course.morpg.domain.User;
 import fi.haagahelia.course.morpg.domain.UserRepository;
 import fi.haagahelia.course.morpg.domain.UserRepositoryCustom;
 import fi.haagahelia.course.morpg.domain.Character;
+import fi.haagahelia.course.morpg.domain.Monster;
+import fi.haagahelia.course.morpg.domain.Location;
+import fi.haagahelia.course.morpg.domain.LocationRepository;
+import fi.haagahelia.course.morpg.domain.LocationRepositoryCustom;
+import fi.haagahelia.course.morpg.domain.Type;
 import fi.haagahelia.course.morpg.domain.TypeRepository;
-import fi.haagahelia.course.morpg.domain.SignForm;
 
 @Controller
 public class MorpgController {
@@ -34,6 +42,12 @@ public class MorpgController {
 	
 	@Autowired
 	private TypeRepository typeRepo;
+	
+	@Autowired
+	private LocationRepository locoRepo;
+	
+	@Autowired
+	private LocationRepositoryCustom locoRepoCustom;
 	
 	// security and user creation
 	
@@ -90,6 +104,8 @@ public class MorpgController {
 		
         model.addAttribute("users", userRepo.findAll());
         model.addAttribute("types", typeRepo.findAll());
+        model.addAttribute("locations", locoRepo.findAll());
+        model.addAttribute("fight", new Fight());
         
         return "main";
     }
@@ -105,7 +121,7 @@ public class MorpgController {
         return "charactercreate";
     }
     
-    // character save function
+    // character creation function
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveCharacter(String userName, Character charToCreate, RedirectAttributes ra) {
 	  	    	
@@ -119,9 +135,9 @@ public class MorpgController {
     	return "redirect:main";
     }
 	
-	// character delete
+	// character delete function
     @RequestMapping(value = "/delete/{userName}/{charName}", method = RequestMethod.GET)
-    public String deleteCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, Model model) {
+    public String deleteCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName) {
     	
     	userRepoCustom.deleteChar(userName, charName);
     	
@@ -140,14 +156,124 @@ public class MorpgController {
     	return "characteredit";
     }
     
-    // character update function
+    // character edit function
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String updateCharacter(String userName, Character charToEdit) {
     	
     	userRepoCustom.updateChar(userName, charToEdit);
     	
     	return "redirect:main";
-    }         
+    }
+    
+    // fight function
+    @RequestMapping(value = "/fight", method = RequestMethod.POST)
+    public String fight(String userName, String charName, String locationName, RedirectAttributes ra) {
+    	
+    	Fight fight = new Fight();
+    	int dice = ThreadLocalRandom.current().nextInt(1, 7);
+    	Character charToFight = userRepoCustom.findCharByName(userName, charName);
+    	List<Type> allTypes = typeRepo.findAll();
+    	
+    	List<Monster> allMonsters = locoRepoCustom.findMonsterByLocation(locationName);
+    	int monsterNumber = allMonsters.size();
+    	int randomMonster = ThreadLocalRandom.current().nextInt(0, monsterNumber);
+    	Monster monsterToFight = allMonsters.get(randomMonster);
+    	
+    	int fightResult = fight.getFightResult(charToFight, monsterToFight, allTypes, dice);
+    	    	    	
+    	ra.addFlashAttribute("result", fightResult);
+
+    	return "redirect:fightresult";
+    }
+    
+    // fight results
+    @RequestMapping(value = "/fightresult")
+    public String fightResults() {
+    	
+    	return "fightresult";
+    }
+    
+    // ADMIN pages
+    
+    // main admin page
+	@RequestMapping(value = "/admin")
+    public String adminPage(Model model) {
+		
+        model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("types", typeRepo.findAll());
+        model.addAttribute("locations", locoRepo.findAll());
+        
+        return "admin";
+    }
+	
+	// user delete function
+    @RequestMapping(value = "/deleteuser/{userName}", method = RequestMethod.GET)
+    public String deleteUser(@PathVariable("userName") String userName) {
+    	
+    	userRepo.deleteByUserName(userName);
+    	
+        return "redirect:../admin";
+    }
+    
+	// location creation page
+    @RequestMapping(value = "/newlocation")
+    public String addLocation(Model model) {
+    	
+    	model.addAttribute("newLocation", new Location());
+
+        return "locationcreate";
+    }
+    
+    // location creation function
+    @RequestMapping(value = "/savelocation", method = RequestMethod.POST)
+    public String saveLocation(Location locationToCreate, RedirectAttributes ra) {
+	  	    	
+	    	if (locoRepo.findByName(locationToCreate.getName()) == null) { // check if location name exists
+	    		locoRepo.insert(locationToCreate);
+	    	} else {
+    	        ra.addFlashAttribute("errorMessage", "Location already exists");
+    			return "redirect:newlocation";		    		
+	    	}
+	    	
+    	return "redirect:admin";
+    }
+    
+    // location edit page
+    @RequestMapping(value = "/editlocation/{locationName}", method = RequestMethod.GET)
+    public String editLocation(@PathVariable("locationName") String locationName, Model model) {
+    	
+    	Location locationToEdit = locoRepo.findByName(locationName);
+    	model.addAttribute("locationToEdit", locationToEdit);
+    	   
+    	return "locationedit";
+    }
+    
+    // location edit function
+    @RequestMapping(value = "/updatelocation", method = RequestMethod.POST)
+    public String updateLocation(Location locationToEdit) {
+    	
+    	locoRepo.save(locationToEdit);
+    	
+    	return "redirect:admin";
+    }
+    
+	// location delete function
+    @RequestMapping(value = "/deletelocation/{locationName}", method = RequestMethod.GET)
+    public String deleteLocation(@PathVariable("locationName") String locationName) {
+    	
+    	locoRepo.deleteByLocationName(locationName);
+    	
+        return "redirect:../admin";
+    }
+    
+	// monster delete function
+    @RequestMapping(value = "/deletemonster/{locationName}/{monsterName}", method = RequestMethod.GET)
+    public String deleteMonster(@PathVariable("locationName") String locationName, @PathVariable("monsterName") String monsterName) {
+    	
+    	locoRepoCustom.deleteMonster(locationName, monsterName);
+    	
+        return "redirect:../../admin";
+    }
     
     // RESTful services
     

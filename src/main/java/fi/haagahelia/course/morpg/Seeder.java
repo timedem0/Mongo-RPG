@@ -6,6 +6,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import fi.haagahelia.course.morpg.domain.Character;
+import fi.haagahelia.course.morpg.domain.Monster;
+import fi.haagahelia.course.morpg.domain.Location;
+import fi.haagahelia.course.morpg.domain.LocationRepository;
 import fi.haagahelia.course.morpg.domain.Type;
 import fi.haagahelia.course.morpg.domain.TypeRepository;
 import fi.haagahelia.course.morpg.domain.User;
@@ -15,19 +18,34 @@ import fi.haagahelia.course.morpg.domain.UserRepository;
 public class Seeder implements CommandLineRunner {
 	private UserRepository userRepo;
 	private TypeRepository typeRepo;
+	private LocationRepository locoRepo;
 
-	public Seeder(UserRepository userRepo, TypeRepository typeRepo) {
+	public Seeder(UserRepository userRepo, TypeRepository typeRepo, LocationRepository locoRepo) {
 		this.userRepo = userRepo;
 		this.typeRepo = typeRepo;
+		this.locoRepo = locoRepo;
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
 		
 		// create new character types
-		Type druid = new Type("Druid", 50, 50, "nature", "fire", "forest");
-		Type warrior = new Type("Warrior", 20, 70, "physical", "frost", "plains");
-		Type mage = new Type("Mage", 70, 20, "fire", "nature", "city");
+		Type druid = new Type("Druid", 50, 50, "nature", "fire", "Forest");
+		Type warrior = new Type("Warrior", 20, 70, "physical", "nature", "plains");
+		Type mage = new Type("Mage", 70, 20, "fire", "nature", "Ruins");
+		
+		// create new monsters
+		Monster harpy = new Monster("Harpy", 50, 50, "nature", "physical");
+		Monster vampire = new Monster("Vampire", 80, 60, "physical", "fire");
+		Monster skeleton = new Monster("Skeleton", 1, 1, "physical", "nature");
+		
+		Monster wolf = new Monster("Naga", 20, 10, "physical", "physical");
+		Monster ancient = new Monster("Ancient", 10, 50, "fire", "nature");
+		Monster satyr = new Monster("Satyr", 70, 20, "nature", "fire");
+		
+		// create new locations
+		Location ruins = new Location("Ruins", "A dark and hollow place", "url", Arrays.asList(harpy, skeleton, vampire));
+		Location forest = new Location("Forest", "An enchanted elvish forest", "url", Arrays.asList(ancient, wolf, satyr));
 		
 		// create new characters
 		Character drucilla = new Character("Drucilla", druid.getTypeName(), 1, "none", false);
@@ -40,12 +58,18 @@ public class Seeder implements CommandLineRunner {
 		
 		// drop all previous users and types, if any
 		this.typeRepo.deleteAll();
+		this.locoRepo.deleteAll();
 		this.userRepo.deleteAll();
 		
-		// add the users and types to the database
+		
+		// add all to the database
 		this.typeRepo.save(druid);
 		this.typeRepo.save(warrior);
 		this.typeRepo.save(mage);
+		
+		this.locoRepo.save(ruins);
+		this.locoRepo.save(forest);
+		
 		this.userRepo.save(admin);
 		this.userRepo.save(user);
 	}	

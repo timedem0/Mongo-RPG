@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <title>Mongo RPG - Character Creation</title>
+    <title>Mongo RPG - Location Creation</title>
     <meta name="author" content="Tudor Nica">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -21,34 +21,28 @@
 	
 	<div>
 
-		<h1>Character Creation</h1>
+		<h1>Location Creation</h1>
 		<br />
 		
 		<div>
 		
-			<form th:object="${newChar}" th:with="myUser=${userName}" th:action="@{../save}" action="#" method="post">	
+			<form th:object="${newLocation}" th:action="@{/savelocation}" action="#" method="post">	
 
 				<div>
-				  	<label for="charName">Character Name: </label>
-					<input type="text" id="charName" placeholder="" th:field="${newChar.charName}" required />
+				  	<label for="name">Location Name: </label>
+					<input type="text" id="name" placeholder="" th:field="${newLocation.name}" required />
 				</div>
-				<div role="alert" th:text=${errorMessage}></div>
+				<div th:text=${errorMessage}></div>
 				<div>
-				  	<label for="weapon">Weapon: </label>
-					<input type="text" id="weapon" placeholder="" th:field="${newChar.weapon}" required />
+				  	<label for="description">Description: </label>
+					<input type="text" id="description" placeholder="" th:field="${newLocation.description}" required />
 				</div>
 				<div>
-					<label for="type">Class: </label>
-					<select id="type" th:field="${newChar.type}">
-						<option th:each="j : ${types}"
-								th:value="${j.typeName}"
-								th:text="${j.typeName}">
-						</option>
-					</select>
+				  	<label for="picture">Picture Link: </label>
+					<input type="text" id="picture" placeholder="" th:field="${newLocation.picture}" required />
 				</div>
-				<input type="hidden" name="userName" th:value="${myUser}" />
 				<div>
-					<a href="/main">Back</a>
+					<a href="/admin">Back</a>
 				    <button type="reset">Reset</button>
 				    <input type="submit" value="Save" />
 				</div>
@@ -59,6 +53,6 @@
 	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>	
 	
 </body>

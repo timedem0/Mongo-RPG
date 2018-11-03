@@ -32,7 +32,7 @@
 				</div>
 				<div>
 				  	<label for="name">Location Name: </label>
-					<input type="text" id="name" th:placeholder="${locationToEdit.name}" th:field="${locationToEdit.name}" required />
+					<input type="text" id="name" th:placeholder="${locationToEdit.name}" th:field="${locationToEdit.name}" required readonly />
 				</div>
 				<div>
 				  	<label for="description">Description: </label>
@@ -41,7 +41,7 @@
 				<div>
 					<label for="picture">Picture URL: </label>
 					<input type="text" id="picture" th:placeholder="${locationToEdit.picture}" th:field="${locationToEdit.picture}" required />
-				</div>			 
+				</div>	 
 				<div>
 					<a href="/admin">Back</a>
 				    <button type="reset">Reset</button>

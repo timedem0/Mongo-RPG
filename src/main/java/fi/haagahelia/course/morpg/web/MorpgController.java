@@ -234,7 +234,7 @@ public class MorpgController {
 	        ra.addFlashAttribute("errorMessage", "Location already exists");
 			return "redirect:newlocation";		    		
     	}
-	    	
+
     	return "redirect:admin";
     }
     
@@ -252,7 +252,7 @@ public class MorpgController {
     @RequestMapping(value = "/updatelocation", method = RequestMethod.POST)
     public String updateLocation(Location locationToEdit) {
     	
-    	locoRepo.save(locationToEdit);
+    	locoRepoCustom.updateLocation(locationToEdit);
     	
     	return "redirect:admin";
     }

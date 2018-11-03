@@ -17,19 +17,20 @@ public class LocationRepositoryCustomImpl implements LocationRepositoryCustom {
 	@Autowired
     MongoTemplate mongoTemplate;
 	
-	public long deleteMonster(String locationName, String monsterName) {
-	
-		Query query = new Query(Criteria.where("name").is(locationName));
+	public long updateLocation(Location locationToEdit) {
 		
-		Update update = new Update();
-		update.pull("monsters", Query.query(Criteria.where("monsterName").is(monsterName)));
+		Query query = new Query(Criteria.where("name").is(locationToEdit.getName()));
 		
-		UpdateResult result = this.mongoTemplate.updateFirst(query, update, Location.class);
-		
-		if (result != null) {
-		    return result.getModifiedCount();
-		}
-		return 0;
+        Update update = new Update();
+        update.set("description", locationToEdit.getDescription());
+        update.set("picture", locationToEdit.getPicture());
+
+        UpdateResult result = this.mongoTemplate.updateFirst(query, update, Location.class);
+        
+        if (result != null) {
+            return result.getModifiedCount();
+        }
+        return 0;
 	}
 	
 	public List<Monster> findMonsterByLocation(String locationName) {
@@ -83,4 +84,19 @@ public class LocationRepositoryCustomImpl implements LocationRepositoryCustom {
         }
         return 0;
     }
+
+	public long deleteMonster(String locationName, String monsterName) {
+		
+		Query query = new Query(Criteria.where("name").is(locationName));
+		
+		Update update = new Update();
+		update.pull("monsters", Query.query(Criteria.where("monsterName").is(monsterName)));
+		
+		UpdateResult result = this.mongoTemplate.updateFirst(query, update, Location.class);
+		
+		if (result != null) {
+		    return result.getModifiedCount();
+		}
+		return 0;
+	}
 }

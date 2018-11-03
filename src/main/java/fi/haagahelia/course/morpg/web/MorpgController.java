@@ -125,25 +125,16 @@ public class MorpgController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveCharacter(String userName, Character charToCreate, RedirectAttributes ra) {
 	  	    	
-	    	if (userRepoCustom.findCharByName(userName, charToCreate.getCharName()) == null) { // check if character name exists
-	    		userRepoCustom.insertChar(userName, charToCreate);
-	    	} else {
-    	        ra.addFlashAttribute("errorMessage", "Character already exists");
-    			return "redirect:create/" + userName;		    		
-	    	}
+    	if (userRepoCustom.findCharByName(userName, charToCreate.getCharName()) == null) { // check if character name exists
+    		userRepoCustom.insertChar(userName, charToCreate);
+    	} else {
+	        ra.addFlashAttribute("errorMessage", "Character already exists");
+			return "redirect:create/" + userName;		    		
+    	}
 	    	
     	return "redirect:main";
     }
-	
-	// character delete function
-    @RequestMapping(value = "/delete/{userName}/{charName}", method = RequestMethod.GET)
-    public String deleteCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName) {
-    	
-    	userRepoCustom.deleteChar(userName, charName);
-    	
-        return "redirect:../../main";
-    }
-    
+	 
     // character edit page
     @RequestMapping(value = "/edit/{userName}/{charName}", method = RequestMethod.GET)
     public String editCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, Model model) {
@@ -163,6 +154,15 @@ public class MorpgController {
     	userRepoCustom.updateChar(userName, charToEdit);
     	
     	return "redirect:main";
+    }
+    
+	// character delete function
+    @RequestMapping(value = "/delete/{userName}/{charName}", method = RequestMethod.GET)
+    public String deleteCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName) {
+    	
+    	userRepoCustom.deleteChar(userName, charName);
+    	
+        return "redirect:../../main";
     }
     
     // fight function
@@ -228,12 +228,12 @@ public class MorpgController {
     @RequestMapping(value = "/savelocation", method = RequestMethod.POST)
     public String saveLocation(Location locationToCreate, RedirectAttributes ra) {
 	  	    	
-	    	if (locoRepo.findByName(locationToCreate.getName()) == null) { // check if location name exists
-	    		locoRepo.insert(locationToCreate);
-	    	} else {
-    	        ra.addFlashAttribute("errorMessage", "Location already exists");
-    			return "redirect:newlocation";		    		
-	    	}
+    	if (locoRepo.findByName(locationToCreate.getName()) == null) { // check if location name exists
+    		locoRepo.insert(locationToCreate);
+    	} else {
+	        ra.addFlashAttribute("errorMessage", "Location already exists");
+			return "redirect:newlocation";		    		
+    	}
 	    	
     	return "redirect:admin";
     }
@@ -264,6 +264,67 @@ public class MorpgController {
     	locoRepo.deleteByLocationName(locationName);
     	
         return "redirect:../admin";
+    }
+    
+	// monster creation page
+    @RequestMapping(value = "/newmonster/{locationName}")
+    public String addMonster(@PathVariable("locationName") String locationName, Model model) {
+    	
+    	model.addAttribute("newMonster", new Monster());
+    	model.addAttribute("locationName", locationName);
+
+        return "monstercreate";
+    }
+    
+    // monster creation function
+    @RequestMapping(value = "/savemonster", method = RequestMethod.POST)
+    public String saveMonster(String locationName, Monster monsterToCreate, RedirectAttributes ra) {
+    	
+		List<Monster> monstersAtLocation = locoRepoCustom.findMonsterByLocation(locationName);
+		int count = 0;
+		
+		for (Monster m : monstersAtLocation) {
+			if (m.getMonsterName().equals(monsterToCreate.getMonsterName())) {
+				count++;
+			}
+		}
+		
+		if (count == 0) {
+			locoRepoCustom.insertMonster(locationName, monsterToCreate);
+		} else {
+	        ra.addFlashAttribute("errorMessage", "Monster already exists");
+			return "redirect:newmonster/" + locationName;      			
+		}
+    		
+    	return "redirect:admin";
+    }
+    
+    // monster edit page
+    @RequestMapping(value = "/editmonster/{locationName}/{monsterName}", method = RequestMethod.GET)
+    public String editMonster(@PathVariable("locationName") String locationName, @PathVariable("monsterName") String monsterName, Model model) {
+    	
+    	List<Monster> monstersAtLocation = locoRepoCustom.findMonsterByLocation(locationName);  	
+    	Monster monsterToEdit = new Monster();
+    	
+		for (Monster m : monstersAtLocation) {
+			if (m.getMonsterName().equals(monsterName)) {
+				monsterToEdit = m;
+			}
+		}    	
+    	
+    	model.addAttribute("monsterToEdit", monsterToEdit);
+    	model.addAttribute("locationName", locationName);
+    	   
+    	return "monsteredit";
+    }
+    
+    // monster edit function
+    @RequestMapping(value = "/updatemonster", method = RequestMethod.POST)
+    public String updateMonster(String locationName, Monster monsterToEdit, RedirectAttributes ra) {
+    	
+		locoRepoCustom.updateMonster(locationName, monsterToEdit);
+    	
+    	return "redirect:admin";
     }
     
 	// monster delete function

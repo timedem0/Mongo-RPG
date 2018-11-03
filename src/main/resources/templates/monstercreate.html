@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Mongo RPG - Monster Creation</title>
+    <meta name="author" content="Tudor Nica">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/stylesheet.css" />
+</head>
+
+<body>
+	
+	<div>
+		<span th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</span>
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out">
+		</form>
+	</div>
+	
+	<div>
+
+		<h1>Monster Creation</h1>
+		<br />
+		
+		<div>
+		
+			<form th:object="${newMonster}" th:with="parentLocation=${locationName}" th:action="@{../../savemonster}" action="#" method="post">	
+
+				<div>
+				  	<label for="monsterName">Monster Name: </label>
+					<input type="text" id="monsterName" placeholder="" th:field="${newMonster.monsterName}" required />
+				</div>
+				<div role="alert" th:text=${errorMessage}></div>
+				<div>
+				  	<label for="attack">Attack Power: </label>
+					<input type="text" id="attack" placeholder="" th:field="${newMonster.attack}" required />
+				</div>
+				<div>
+				  	<label for="defence">Defense Strength: </label>
+					<input type="text" id="defence" placeholder="" th:field="${newMonster.defence}" required />
+				</div>
+				<div>
+					<label for="attackType">Attack Type: </label>
+					<select id="type" th:field="${newMonster.attackType}">
+						<option value="physical">physical</option>
+						<option value="nature">nature</option>
+						<option value="fire">fire</option>
+					</select>
+				</div>
+				<div>
+					<label for="vulnerability">Attack Type: </label>
+					<select id="vulnerability" th:field="${newMonster.vulnerability}">
+						<option value="physical">physical</option>
+						<option value="nature">nature</option>
+						<option value="fire">fire</option>
+					</select>
+				</div>
+				<input type="hidden" name="locationName" th:value="${locationName}" />
+				<div>
+					<a href="/admin">Back</a>
+				    <button type="reset">Reset</button>
+				    <input type="submit" value="Save" />
+				</div>
+ 				
+			</form>
+		
+		</div>
+	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	
+</body>

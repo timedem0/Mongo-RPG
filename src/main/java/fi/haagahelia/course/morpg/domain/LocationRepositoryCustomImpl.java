@@ -47,4 +47,40 @@ public class LocationRepositoryCustomImpl implements LocationRepositoryCustom {
     		return monsters;
     	}
 	}
+	
+    public long insertMonster(String locationName, Monster newMonster) {
+	       
+        Query query = new Query(Criteria.where("name").is(locationName));
+        
+        Update update = new Update();
+        update.push("monsters", newMonster);
+ 
+        UpdateResult result = this.mongoTemplate.updateFirst(query, update, Location.class);
+ 
+        if (result != null) {
+            return result.getModifiedCount();
+        }
+        return 0;
+    }
+    
+    public long updateMonster(String locationName, Monster monsterToEdit) {
+    	
+        Query query = new Query(new Criteria().andOperator(
+      		  Criteria.where("name").is(locationName),
+      		  Criteria.where("monsters").elemMatch(Criteria.where("monsterName").is(monsterToEdit.getMonsterName()))
+      		));
+        
+        Update update = new Update();
+        update.set("monsters.$.attack", monsterToEdit.getAttack());
+        update.set("monsters.$.defence", monsterToEdit.getDefence());
+        update.set("monsters.$.attackType", monsterToEdit.getAttackType());
+        update.set("monsters.$.vulnerability", monsterToEdit.getVulnerability());
+ 
+        UpdateResult result = this.mongoTemplate.updateFirst(query, update, Location.class);
+ 
+        if (result != null) {
+            return result.getModifiedCount();
+        }
+        return 0;
+    }
 }

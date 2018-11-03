@@ -33,22 +33,6 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         return 0;
     }
     
-    public long insertChar(String userName, Character newChar) {
- 	       
-        Query query = new Query(Criteria.where("name").is(userName));
-        
-        Update update = new Update();
-        update.push("characters", newChar);
- 
-        UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
- 
-        if (result != null) {
-            return result.getModifiedCount();
-        }
- 
-        return 0;
-    }
-     
     public Character findCharByName(String userName, String charName) {
     	
         Query query = new Query(new Criteria().andOperator(
@@ -69,6 +53,21 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     	}
     }
     
+    public long insertChar(String userName, Character newChar) {
+ 	       
+        Query query = new Query(Criteria.where("name").is(userName));
+        
+        Update update = new Update();
+        update.push("characters", newChar);
+ 
+        UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
+ 
+        if (result != null) {
+            return result.getModifiedCount();
+        }
+        return 0;
+    }
+         
     public long updateChar(String userName, Character charToEdit) {
     	
         Query query = new Query(new Criteria().andOperator(

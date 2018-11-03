@@ -26,18 +26,25 @@
               <tr>
                 <th scope="col">Name </th>
                 <th scope="col">Class </th>
-                <th scope="col">Level </th>
-                <th scope="col">Attributes </th>
                 <th scope="col">Weapon </th>
+                <th scope="col">Attributes </th>
+                <th scope="col">Victories </th>
+				<th scope="col">Defeats </th>
                 <th scope="col"></th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <tbody th:each="i : ${users}" th:if="${i.name} == ${#httpServletRequest.remoteUser}">
-                <tr th:each="j : ${i.characters}" th:if="${j.isDeleted} == false">
-                    <th th:text="${j.charName}"></th>
+                <tr th:each="j : ${i.characters}">
+                    <th>
+                    	<span th:text="${j.charName}"></span><br />
+                    	<span th:text="${j.flavourText}"></span>
+                    </th>
                     <td th:text="${j.type}"></td>                    
-                   	<td th:text="${j.level}"></td>
+                   	<td th:each="k : ${weapons}" th:if="${j.weapon} == ${k.weaponName}">
+                   		<span th:text="${k.weaponText}"></span><br />
+                   		<span th:text="'Weapon Power: ' + ${k.power}"></span>
+                   	</td>
                     <td th:each="k : ${types}" th:if="${j.type} == ${k.typeName}">
                     	<ul>
                     		<li th:text="'Attack Power: ' + ${k.attack}"></li>
@@ -47,7 +54,8 @@
                     		<li th:text="'Preferred Terrain: ' + ${k.terrain}"></li>
                     	</ul>
                     </td>
-                    <td th:text="${j.weapon}"></td>     
+                    <td th:text="${j.victories}"></td>
+                    <td th:text="${j.defeats}"></td>  
                     <td><a th:href="@{/delete/{userName}/{charName}(userName=${i.name},charName=${j.charName})}">Delete</a></td>
                     <td><a th:href="@{/edit/{userName}/{charName}(userName=${i.name},charName=${j.charName})}">Edit</a></td>
                 </tr>
@@ -67,7 +75,7 @@
 					<div>
 						<label for="${fight.charName}">Choose Character: </label>
 						<select id="character" th:field="${fight.charName}">
-							<option th:each="j : ${i.characters}" th:if="${j.isDeleted} == false"
+							<option th:each="j : ${i.characters}"
 									th:value="${j.charName}"
 									th:text="${j.charName}">
 							</option>

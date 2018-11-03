@@ -13,15 +13,19 @@ import fi.haagahelia.course.morpg.domain.Type;
 import fi.haagahelia.course.morpg.domain.TypeRepository;
 import fi.haagahelia.course.morpg.domain.User;
 import fi.haagahelia.course.morpg.domain.UserRepository;
+import fi.haagahelia.course.morpg.domain.Weapon;
+import fi.haagahelia.course.morpg.domain.WeaponRepository;
 
 @Component
 public class Seeder implements CommandLineRunner {
 	private UserRepository userRepo;
 	private TypeRepository typeRepo;
+	private WeaponRepository weapRepo;
 	private LocationRepository locoRepo;
 
-	public Seeder(UserRepository userRepo, TypeRepository typeRepo, LocationRepository locoRepo) {
+	public Seeder(UserRepository userRepo, WeaponRepository weapRepo, TypeRepository typeRepo, LocationRepository locoRepo) {
 		this.userRepo = userRepo;
+		this.weapRepo = weapRepo;
 		this.typeRepo = typeRepo;
 		this.locoRepo = locoRepo;
 	}
@@ -31,8 +35,15 @@ public class Seeder implements CommandLineRunner {
 		
 		// create new character types
 		Type druid = new Type("Druid", 50, 50, "nature", "fire", "Forest");
-		Type warrior = new Type("Warrior", 20, 70, "physical", "nature", "plains");
-		Type mage = new Type("Mage", 70, 20, "fire", "nature", "Ruins");
+		Type warrior = new Type("Warrior", 20, 70, "physical", "nature", "Ruins");
+		Type mage = new Type("Mage", 70, 20, "fire", "nature", "Forest");
+		
+		// create new weapons
+		Weapon stick = new Weapon("Stick", "Broken Stick", 1);
+		Weapon hammer = new Weapon("Hammer", "Rusty Old Hammer", 2);
+		Weapon sword = new Weapon("Sword", "Sword of Justice", 5);
+		Weapon staff = new Weapon("Staff", "Staff of the World Tree", 10);
+		Weapon skull = new Weapon("Skull", "Skull of Odin", 20);
 		
 		// create new monsters
 		Monster harpy = new Monster("Harpy", 50, 50, "nature", "physical");
@@ -48,21 +59,27 @@ public class Seeder implements CommandLineRunner {
 		Location forest = new Location("Forest", "An enchanted elvish forest", "url", Arrays.asList(ancient, wolf, satyr));
 		
 		// create new characters
-		Character drucilla = new Character("Drucilla", druid.getTypeName(), 1, "none", false);
-		Character hammer = new Character("Doomhammer", warrior.getTypeName(), 1, "Hammer of Justice", false);
-		Character ciri = new Character("Ciri", mage.getTypeName(), 1, "Staff of the World Tree", false);
+		Character cerise = new Character("Cerise", "A sweet girl from a small village in the forest", druid.getTypeName(), stick.getWeaponName(), 0, 0);
+		Character peticel = new Character("Peticel", "A mighty warrior from Thunder Bluff", warrior.getTypeName(), sword.getWeaponName(), 7, 2);
+		Character ellymoo = new Character("Ellymoo", "A wise spell weaver from the plains of Mulgore", mage.getTypeName(), staff.getWeaponName(), 3, 0);
 		
 		// create new users
 		User admin = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN", Arrays.asList());
-		User user = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",  Arrays.asList(drucilla, hammer, ciri));
+		User user = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",  Arrays.asList(cerise, peticel, ellymoo));
 		
 		// drop all previous users and types, if any
-		this.typeRepo.deleteAll();
-		this.locoRepo.deleteAll();
 		this.userRepo.deleteAll();
-		
+		this.typeRepo.deleteAll();
+		this.weapRepo.deleteAll();
+		this.locoRepo.deleteAll();
 		
 		// add all to the database
+		this.weapRepo.save(stick);
+		this.weapRepo.save(hammer);
+		this.weapRepo.save(sword);
+		this.weapRepo.save(staff);
+		this.weapRepo.save(skull);
+		
 		this.typeRepo.save(druid);
 		this.typeRepo.save(warrior);
 		this.typeRepo.save(mage);

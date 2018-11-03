@@ -14,25 +14,7 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	
 	@Autowired
     MongoTemplate mongoTemplate;
-	
-    public long deleteChar(String userName, String charName) {
-    	   
-        Query query = new Query(new Criteria().andOperator(
-        		  Criteria.where("name").is(userName),
-        		  Criteria.where("characters").elemMatch(Criteria.where("charName").is(charName))
-        		));
-        
-        Update update = new Update();
-        update.set("characters.$.isDeleted", true);
- 
-        UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
- 
-        if (result != null) {
-            return result.getModifiedCount();
-        }
-        return 0;
-    }
-    
+	    
     public Character findCharByName(String userName, String charName) {
     	
         Query query = new Query(new Criteria().andOperator(
@@ -76,10 +58,26 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
       		));
         
         Update update = new Update();
-        update.set("characters.$.weapon", charToEdit.getWeapon());
+        update.set("characters.$.flavourText", charToEdit.getFlavourText());
         update.set("characters.$.type", charToEdit.getType());
-        update.set("characters.$.level", charToEdit.getLevel());
-        update.set("characters.$.isDeleted", false);
+        update.set("characters.$.weapon", charToEdit.getWeapon());
+        update.set("characters.$.victories", charToEdit.getVictories());
+        update.set("characters.$.defeats", charToEdit.getDefeats());
+ 
+        UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
+ 
+        if (result != null) {
+            return result.getModifiedCount();
+        }
+        return 0;
+    }
+    
+    public long deleteChar(String userName, String charName) {
+ 	   
+		Query query = new Query(Criteria.where("name").is(userName));
+		
+		Update update = new Update();
+		update.pull("characters", Query.query(Criteria.where("charName").is(charName)));
  
         UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
  

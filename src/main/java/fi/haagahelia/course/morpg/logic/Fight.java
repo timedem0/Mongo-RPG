@@ -57,7 +57,7 @@ public class Fight {
 	        }
 	    }
 		
-		result = charToFight.getLevel() + charAttack + monsterToFight.getAttack() + dice;
+		result = charToFight.getVictories() + charAttack + monsterToFight.getAttack() + dice;
 		
 		return result;
 		

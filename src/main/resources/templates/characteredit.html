@@ -32,12 +32,8 @@
 					<input type="text" id="charName" th:placeholder="${charToEdit.charName}" th:field="${charToEdit.charName}" required readonly />
 				</div>
 				<div>
-				  	<label for="level">Level: </label>
-					<input type="text" id="level" th:placeholder="${charToEdit.level}" th:field="${charToEdit.level}" required readonly />
-				</div>
-				<div>
-					<label for="weapon">Weapon: </label>
-					<input type="text" id="weapon" th:placeholder="${charToEdit.weapon}" th:field="${charToEdit.weapon}" required />
+				  	<label for="flavourText">Character Flavour Text: </label>
+					<input type="text" id="flavourText" th:placeholder="${charToEdit.flavourText}" th:field="${charToEdit.flavourText}" required />
 				</div>
 				<div>
 					<label for="type">Class</label>
@@ -48,6 +44,11 @@
 						</option>
 					</select>
 				</div>
+				<div>
+					<input type="text" id="victories" th:placeholder="${charToEdit.victories}" th:field="${charToEdit.victories}" required readonly />
+					<input type="text" id="defeats" th:placeholder="${charToEdit.defeats}" th:field="${charToEdit.defeats}" required readonly />
+					<input type="text" id="weapon" th:placeholder="${charToEdit.weapon}" th:field="${charToEdit.weapon}" required readonly />
+				</div>
 				<input type="hidden" name="userName" th:value="${myUser}" />				 
 				<div>
 					<a href="/main">Back</a>
@@ -56,9 +57,7 @@
 				</div>
 
 			</form>
-		
 		</div>
-
 	</div>
 		
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

@@ -23,13 +23,16 @@ import fi.haagahelia.course.morpg.domain.SignForm;
 import fi.haagahelia.course.morpg.domain.User;
 import fi.haagahelia.course.morpg.domain.UserRepository;
 import fi.haagahelia.course.morpg.domain.UserRepositoryCustom;
+import fi.haagahelia.course.morpg.domain.Type;
+import fi.haagahelia.course.morpg.domain.TypeRepository;
+import fi.haagahelia.course.morpg.domain.Weapon;
+import fi.haagahelia.course.morpg.domain.WeaponRepository;
 import fi.haagahelia.course.morpg.domain.Character;
 import fi.haagahelia.course.morpg.domain.Monster;
 import fi.haagahelia.course.morpg.domain.Location;
 import fi.haagahelia.course.morpg.domain.LocationRepository;
 import fi.haagahelia.course.morpg.domain.LocationRepositoryCustom;
-import fi.haagahelia.course.morpg.domain.Type;
-import fi.haagahelia.course.morpg.domain.TypeRepository;
+
 
 @Controller
 public class MorpgController {
@@ -42,6 +45,9 @@ public class MorpgController {
 	
 	@Autowired
 	private TypeRepository typeRepo;
+	
+	@Autowired
+	private WeaponRepository weapRepo;
 	
 	@Autowired
 	private LocationRepository locoRepo;
@@ -104,6 +110,7 @@ public class MorpgController {
 		
         model.addAttribute("users", userRepo.findAll());
         model.addAttribute("types", typeRepo.findAll());
+        model.addAttribute("weapons", weapRepo.findAll());
         model.addAttribute("locations", locoRepo.findAll());
         model.addAttribute("fight", new Fight());
         
@@ -113,9 +120,16 @@ public class MorpgController {
 	// character creation page
     @RequestMapping(value = "/create/{userName}")
     public String addCharacter(@PathVariable("userName") String userName, Model model) {
+    	   	
+    	List<Weapon> allWeapons = weapRepo.findAll();
+    	int randomWeapon = ThreadLocalRandom.current().nextInt(0, allWeapons.size());
+    	Weapon charWeapon = allWeapons.get(randomWeapon);
+    	Character charToInsert = new Character();
+    	charToInsert.setWeapon(charWeapon.getWeaponName());
     	
-    	model.addAttribute("newChar", new Character());
     	model.addAttribute("userName", userName);
+    	model.addAttribute("newChar", charToInsert);
+    	model.addAttribute("weapon", charWeapon);
     	model.addAttribute("types", typeRepo.findAll());
 
         return "charactercreate";

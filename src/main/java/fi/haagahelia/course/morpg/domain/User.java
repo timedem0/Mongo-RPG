@@ -1,5 +1,6 @@
 package fi.haagahelia.course.morpg.domain;
 
+import java.util.ArrayList;
 // import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +30,10 @@ public class User {
 	@Field
 	private List<Character> characters;
 	
-	/*
-	protected User() {
+	public User() {
 		this.characters = new ArrayList<>();
 	}
-	*/
 	
-    public User() {
-    }
-
 	public User(String name, String password, String role, List<Character> characters) {
 		this.name = name;
 		this.password = password;
@@ -104,7 +100,6 @@ public class User {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		
     	return jsonString;
     }
 }

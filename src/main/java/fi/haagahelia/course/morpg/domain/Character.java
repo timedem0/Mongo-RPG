@@ -12,24 +12,27 @@ public class Character {
 	@Field
 	private String charName;
 	@Field
-	private String type;
+	private String flavourText;
 	@Field
-	private int level = 1;
+	private String type;
 	@Field
 	private String weapon;
 	@Field
-	private boolean isDeleted = false;
+	private int victories = 0;
+	@Field
+	private int defeats = 0;
 	
 	public Character() {
 		
 	}
 	
-	public Character(String charName, String type, int level, String weapon, boolean isDeleted) {
+	public Character(String charName, String flavourText, String type, String weapon, int victories, int defeats) {
 		this.charName = charName;
+		this.flavourText = flavourText;
 		this.type = type;
-		this.level = level;
 		this.weapon = weapon;
-		this.isDeleted = isDeleted;
+		this.victories = victories;
+		this.defeats = defeats;
 	}
 
 	public String getCharName() {
@@ -38,6 +41,14 @@ public class Character {
 
 	public void setCharName(String charName) {
 		this.charName = charName;
+	}
+	
+	public String getFlavourText() {
+		return flavourText;
+	}
+
+	public void setFlavourText(String flavourText) {
+		this.flavourText = flavourText;
 	}
 
 	public String getType() {
@@ -48,14 +59,6 @@ public class Character {
 		this.type = type;
 	}
 
-	public int getLevel() {
-		return level;
-	}
-
-	public void setLevel(int level) {
-		this.level = level;
-	}
-
 	public String getWeapon() {
 		return weapon;
 	}
@@ -64,12 +67,20 @@ public class Character {
 		this.weapon = weapon;
 	}
 	
-	public boolean getIsDeleted() {
-		return isDeleted;
+	public int getVictories() {
+		return victories;
 	}
 
-	public void setIsDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
+	public void setVictories(int victories) {
+		this.victories = victories;
+	}
+	
+	public int getDefeats() {
+		return defeats;
+	}
+
+	public void setDefeats(int defeats) {
+		this.defeats = defeats;
 	}
 	
     @Override
@@ -83,7 +94,6 @@ public class Character {
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		
     	return jsonString;
     }
 }

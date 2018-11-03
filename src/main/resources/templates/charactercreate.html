@@ -34,8 +34,8 @@
 				</div>
 				<div role="alert" th:text=${errorMessage}></div>
 				<div>
-				  	<label for="weapon">Weapon: </label>
-					<input type="text" id="weapon" placeholder="" th:field="${newChar.weapon}" required />
+				  	<label for="flavourText">Character Flavour Text: </label>
+					<input type="text" id="flavourText" placeholder="" th:field="${newChar.flavourText}" required />
 				</div>
 				<div>
 					<label for="type">Class: </label>
@@ -46,6 +46,10 @@
 						</option>
 					</select>
 				</div>
+				<div>
+				  	<label for="weapon">Weapon: You have been randomly assigned a <b><span th:text="${weapon.weaponText}"></span></b> with <b><span th:text="${weapon.power}"></span> attack power</b> from our database. Congratulations!</label>
+					<input type="hidden" id="weapon" placeholder="" th:field="${newChar.weapon}" required />
+				</div>
 				<input type="hidden" name="userName" th:value="${myUser}" />
 				<div>
 					<a href="/main">Back</a>
@@ -54,7 +58,6 @@
 				</div>
  				
 			</form>
-		
 		</div>
 	</div>
 	

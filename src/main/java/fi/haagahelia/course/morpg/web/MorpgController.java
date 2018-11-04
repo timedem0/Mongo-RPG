@@ -182,7 +182,7 @@ public class MorpgController {
     
     // fight function
     @RequestMapping(value = "/fight", method = RequestMethod.POST)
-    public String fight(FightForm newFight, RedirectAttributes ra, Model model) {
+    public String fight(FightForm newFight, Model model) {
  
     	// get the character that will fight
     	Character charToFight = userRepoCustom.findCharByName(newFight.getUserName(), newFight.getCharName());
@@ -347,11 +347,78 @@ public class MorpgController {
         return "redirect:../../admin";
     }
     
+    // RESTful documentation page
+    @RequestMapping(value = "/documentation-restful")
+    public String documentationR() {
+    	
+    	return "documentation-restful";
+    }
+    
     // RESTful services
     
-    @RequestMapping(value="/users", method = RequestMethod.GET)
-    public @ResponseBody List<User> getAllUsers () {
+    @RequestMapping(value="/restful/users", method = RequestMethod.GET)
+    public @ResponseBody List<User> getAllUsers() {
+    	
     	return (List<User>) userRepo.findAll();
+    }
+    
+    @RequestMapping(value="/restful/users/{userName}", method = RequestMethod.GET)
+    public @ResponseBody User getUserByName(@PathVariable("userName") String userName) {
+    	
+    	return (User) userRepo.findByName(userName);
+    }
+    
+    @RequestMapping(value="/restful/characters/{userName}", method = RequestMethod.GET)
+    public @ResponseBody List<Character> getAllCharactersByUser(@PathVariable("userName") String userName) {
+    	
+    	return (List<Character>) userRepoCustom.findCharsByUser(userName);
+    }
+    
+    @RequestMapping(value="/restful/characters/{userName}/{charName}", method = RequestMethod.GET)
+    public @ResponseBody Character getOneCharacterByUserByName(@PathVariable("userName") String userName, @PathVariable("charName") String charName) {
+    	
+    	return (Character) userRepoCustom.findCharByName(userName, charName);
+    }
+    
+    @RequestMapping(value="/restful/locations", method = RequestMethod.GET)
+    public @ResponseBody List<Location> getAllLocations() {
+    	
+    	return (List<Location>) locoRepo.findAll();
+    }
+    
+    @RequestMapping(value="/restful/monsters/{locationName}", method = RequestMethod.GET)
+    public @ResponseBody List<Monster> getAllMonstersByLocation(@PathVariable("locationName") String locationName) {
+    	
+    	return (List<Monster>) locoRepoCustom.findMonsterByLocation(locationName);
+    }
+    
+    @RequestMapping(value="/restful/types", method = RequestMethod.GET)
+    public @ResponseBody List<Type> getAllTypes() {
+    	
+    	return (List<Type>) typeRepo.findAll();
+    }
+    
+    @RequestMapping(value="/restful/weapons", method = RequestMethod.GET)
+    public @ResponseBody List<Weapon> getAllWeapons() {
+    	
+    	return (List<Weapon>) weapRepo.findAll();
+    }
+    
+    @RequestMapping(value="/restful/fight/{userName}/{charName}/{locationName}", method = RequestMethod.GET)
+    public @ResponseBody FightResult getFightResults(@PathVariable("userName") String userName, @PathVariable("charName") String charName, @PathVariable("locationName") String locationName) {
+    	
+    	// get the character that will fight
+    	Character charToFight = userRepoCustom.findCharByName(userName, charName);
+    	
+    	// get all character types, all weapons and all monsters
+    	List<Type> allTypes = typeRepo.findAll();
+    	List<Weapon> allWeapons = weapRepo.findAll();
+    	List<Monster> allMonsters = locoRepoCustom.findMonsterByLocation(locationName);
+    	
+    	// get the result of the fight    	
+    	FightResult fightResult = Fight.getFightResult(userName, charToFight, locationName, allMonsters, allTypes, allWeapons);    	
+    	
+    	return (FightResult) fightResult;
     }
 }
 

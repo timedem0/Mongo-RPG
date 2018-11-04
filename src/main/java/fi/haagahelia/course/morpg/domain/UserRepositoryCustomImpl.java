@@ -1,5 +1,7 @@
 package fi.haagahelia.course.morpg.domain;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -32,6 +34,22 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
     	} else {
     		charToEdit = user.getCharByName(charName);
     		return charToEdit;
+    	}
+    }
+    
+    public List<Character> findCharsByUser(String userName) {
+    	
+		Query query = new Query(Criteria.where("name").is(userName));
+		
+		User user = new User();
+		
+		user = mongoTemplate.findOne((query), User.class);
+    	
+    	if (user == null) {
+    		return null;
+    	} else {
+    		List<Character> characters = user.getCharacters();
+    		return characters;
     	}
     }
     

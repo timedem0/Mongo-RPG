@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Mongo RPG - RESTful Documentation</title>
+    <meta name="author" content="Tudor Nica">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+
+<body>
+	
+	<div>
+		<span th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</span>
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out">
+		</form>
+	</div>
+	
+	<div>
+		<h4>RESTful Documentation</h4>
+		<p>POST, PUT, DELETE Status: Disabled by Spring Security Services</p>
+		<p>The following GET entry points are available, under ADMIN authority authentication:</p>
+		
+		<ul>
+		
+		    <li>/restful/users - to get a list of all users<br />
+		    eg: <a href="/restful/users">/restful/users</a><br /><br />
+		    </li>
+		    
+		    <li>/restful/users/{userName} - to get one user by user name<br />
+		    eg: <a href="/restful/users/testuser">/restful/users/testuser</a><br /><br />
+		    </li>
+		    
+		  	<li>/restful/characters/{userName} - to get a list of characters belonging to a user, by user name<br />
+		    eg: <a href="/restful/characters/testuser">/restful/characters/testuser</a><br /><br />
+		    </li>		  
+ 
+ 		  	<li>/restful/characters/{userName}/{charName} - to get one character belonging to a user, by user name and character name<br />
+		    eg: <a href="/restful/characters/testuser/Peticel">/restful/characters/testuser/Peticel</a><br /><br />
+		    </li>	   
+
+ 		  	<li>/restful/locations - to get a list of all locations<br />
+		    eg: <a href="/restful/locations">/restful/locations</a><br /><br />
+		    </li>	
+
+ 		  	<li>/restful/monsters/{locationName} - to get a list of all monsters at a location, by location name<br />
+		    eg: <a href="/restful/monsters/Ruins">/restful/monsters/Ruins</a><br /><br />
+		    </li>	
+
+ 		  	<li>/restful/types - to get a list of all character types (classes)<br />
+		    eg: <a href="/restful/types">/restful/types</a><br /><br />
+		    </li>	
+
+ 		  	<li>/restful/weapons - to get a list of all weapons<br />
+		    eg: <a href="/restful/weapons">/restful/weapons</a><br /><br />
+		    </li>	
+
+ 		  	<li>/restful/fight/{userName}/{charName}/{locationName} - to get the full parameters for one fight, by user name, character name and location name<br />
+		    notes: one monster is always picked randomly from location and the die is re-rolled for every cast<br />
+		    eg: <a href="/restful/fight/testuser/Ellymoo/Forest">/restful/fight/testuser/Ellymoo/Forest</a><br />
+		    
+		    </li>	
+
+		</ul>
+		
+		<p>There is also available a Spring Data REST Service with HAL Browser, also under ADMIN authority authentication.</p>
+		<ul>
+			<li><a href="/restful/api">/restful/api</a></li>
+		</ul>
+		
+	</div>
+	
+	
+	
+</body>

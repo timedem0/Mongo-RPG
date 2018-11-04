@@ -50,16 +50,21 @@ public class Seeder implements CommandLineRunner {
 		Monster vampire = new Monster("Vampire", 80, 60, "physical", "fire");
 		Monster skeleton = new Monster("Skeleton", 1, 1, "physical", "nature");
 		
-		Monster wolf = new Monster("Naga", 20, 10, "physical", "physical");
+		Monster wolf = new Monster("Wolf", 20, 10, "physical", "physical");
 		Monster ancient = new Monster("Ancient", 10, 50, "fire", "nature");
 		Monster satyr = new Monster("Satyr", 70, 20, "nature", "fire");
+		
+		Monster rat = new Monster("Rat", 10, 20, "physical", "fire");
+		Monster maniac = new Monster("Maniac", 70, 5, "nature", "fire");
+		Monster ripper = new Monster("Ripper", 60, 80, "physical", "nature");
 		
 		// create new locations
 		Location ruins = new Location("Ruins", "A dark and hollow place", "url", Arrays.asList(harpy, skeleton, vampire));
 		Location forest = new Location("Forest", "An enchanted elvish forest", "url", Arrays.asList(ancient, wolf, satyr));
+		Location hospital = new Location("Hospital", "An abandoned mental institution", "url", Arrays.asList(rat, maniac, ripper));
 		
 		// create new characters
-		Character cerise = new Character("Cerise", "A sweet girl from a small village in the forest", druid.getTypeName(), stick.getWeaponName(), 0, 0);
+		Character cerise = new Character("Cerise", "A sweet girl from a small village", druid.getTypeName(), stick.getWeaponName(), 0, 0);
 		Character peticel = new Character("Peticel", "A mighty warrior from Thunder Bluff", warrior.getTypeName(), sword.getWeaponName(), 7, 2);
 		Character ellymoo = new Character("Ellymoo", "A wise spell weaver from the plains of Mulgore", mage.getTypeName(), staff.getWeaponName(), 3, 0);
 		
@@ -86,6 +91,7 @@ public class Seeder implements CommandLineRunner {
 		
 		this.locoRepo.save(ruins);
 		this.locoRepo.save(forest);
+		this.locoRepo.save(hospital);
 		
 		this.userRepo.save(admin);
 		this.userRepo.save(user);

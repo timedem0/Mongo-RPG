@@ -22,8 +22,96 @@
 	
 		<h1>Fight result</h1>
 		<br />
-	
-		<p th:text=${result}></p>
+		
+		<p>
+			<span th:text="${result.character.flavourText}"></span> enters the <span th:text="${result.locationName}"></span>...
+		</p>
+		
+		<p>
+			A vicious <span th:text="${result.monster.monsterName}"></span> spawns and attacks!! <span th:text="${result.character.charName}"></span> readies the powerful <span th:text="${result.weapon.weaponText}"></span> and the fight begins!
+		</p>
+		
+		<p>
+			You rolled <span th:text="${result.dice}"></span>.
+		</p>
+		
+		<p>Stats for nerds</p>
+		
+		<table>
+			<thead>
+				<tr>
+					<th></th>
+					<th><span th:text="${result.character.charName}"></span> the <span th:text="${result.type.typeName}"></span></th>
+					<th><span th:text="${result.monster.monsterName}"></span> the Monster</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Weapon Power </td>
+					<td th:text="${result.weapon.power}"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Attack Power </td>
+					<td th:text="${result.type.attack}"></td>
+					<td th:text="${result.monster.attack}"></td>
+				</tr>
+				<tr>
+					<td>Player Attack vs Monster Vulnerability </td>
+					<td th:text="${result.type.attackType}"></td>
+					<td th:text="${result.monster.vulnerability}"></td>
+				</tr>
+				<tr>
+					<td>Resulting Bonus </td>
+					<td th:text="${result.bonusFromAttack}"></td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>Player Vulnerability vs Monster Attack </td>
+					<td th:text="${result.type.vulnerability}"></td>
+					<td th:text="${result.monster.attackType}"></td>
+				</tr>
+				<tr>
+					<td>Resulting Penalty </td>
+					<td></td>
+					<td th:text="${result.penaltyFromMonsterAttack}"></td>
+				</tr>
+				<tr>
+					<td>Defense Value </td>
+					<td th:text="${result.type.defence}"></td>
+					<td th:text="${result.monster.defence}"></td>
+				</tr>
+				<tr>
+					<td>Favorite Location </td>
+					<td th:text="${result.type.terrain}"></td>
+					<td th:text="${result.locationName}"></td>
+				</tr>
+				<tr>
+					<td>Resulting Bonus </td>
+					<td><span  th:unless="${result.bonusFromLocation.equals(0)}" th:text="${result.bonusFromLocation}"></span></td>
+					<td>5</td>
+				</tr>
+				<tr>
+					<td>Calculated Dice Value </td>
+					<td th:text="${result.diceValue}"></td>
+					<td></td>
+				</tr>			
+			</tbody>
+		</table>
+		
+		<br />
+		
+		<div th:if="${result.battleResult > 0}"> 
+			 <p>Congratulations, you won the battle! Your reputation grows! Final score was <span th:text="${result.battleResult}"></span>.</p>
+		</div>
+		<div th:if="${result.battleResult < 0}"> 
+			 <p>You lost! The moster gives you a good beating. Battered and bruised, you return home. Final score was <span th:text="${result.battleResult}"></span>.</p>
+		</div>
+		<div th:if="${result.battleResult == 0}"> 
+			 <p>Somehow you managed to draw the battle. What are the chances?</p>
+		</div>
+
+		<p>Your character statistics have been updated.</p>
 		
 		<a th:href="@{/main}">Back to main page</a><br />
 	

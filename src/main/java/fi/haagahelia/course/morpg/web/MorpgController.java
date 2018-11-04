@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fi.haagahelia.course.morpg.logic.Fight;
+import fi.haagahelia.course.morpg.logic.FightForm;
+import fi.haagahelia.course.morpg.logic.FightResult;
 import fi.haagahelia.course.morpg.domain.SignForm;
 
 import fi.haagahelia.course.morpg.domain.User;
@@ -32,7 +34,6 @@ import fi.haagahelia.course.morpg.domain.Monster;
 import fi.haagahelia.course.morpg.domain.Location;
 import fi.haagahelia.course.morpg.domain.LocationRepository;
 import fi.haagahelia.course.morpg.domain.LocationRepositoryCustom;
-
 
 @Controller
 public class MorpgController {
@@ -112,7 +113,7 @@ public class MorpgController {
         model.addAttribute("types", typeRepo.findAll());
         model.addAttribute("weapons", weapRepo.findAll());
         model.addAttribute("locations", locoRepo.findAll());
-        model.addAttribute("fight", new Fight());
+        model.addAttribute("fight", new FightForm());
         
         return "main";
     }
@@ -181,35 +182,31 @@ public class MorpgController {
     
     // fight function
     @RequestMapping(value = "/fight", method = RequestMethod.POST)
-    public String fight(String userName, String charName, String locationName, RedirectAttributes ra) {
+    public String fight(FightForm newFight, RedirectAttributes ra, Model model) {
+ 
+    	// get the character that will fight
+    	Character charToFight = userRepoCustom.findCharByName(newFight.getUserName(), newFight.getCharName());
     	
-    	Fight fight = new Fight();
-    	int dice = ThreadLocalRandom.current().nextInt(1, 7);
-    	Character charToFight = userRepoCustom.findCharByName(userName, charName);
+    	// get all character types, all weapons and all monsters
     	List<Type> allTypes = typeRepo.findAll();
+    	List<Weapon> allWeapons = weapRepo.findAll();
+    	List<Monster> allMonsters = locoRepoCustom.findMonsterByLocation(newFight.getLocationName());
     	
-    	List<Monster> allMonsters = locoRepoCustom.findMonsterByLocation(locationName);
-    	int monsterNumber = allMonsters.size();
-    	int randomMonster = ThreadLocalRandom.current().nextInt(0, monsterNumber);
-    	Monster monsterToFight = allMonsters.get(randomMonster);
+    	// get the result of the fight    	
+    	FightResult fightResult = Fight.getFightResult(newFight.getUserName(), charToFight, newFight.getLocationName(), allMonsters, allTypes, allWeapons);
     	
-    	int fightResult = fight.getFightResult(charToFight, monsterToFight, allTypes, dice);
-    	    	    	
-    	ra.addFlashAttribute("result", fightResult);
+    	// update the character statistics
+    	userRepoCustom.updateCharStats(fightResult.getUserName(), fightResult.getCharacter(), fightResult.getVictoriesUpdate(), fightResult.getDefeatsUpdate());
+    	
+    	// preparing the fight result object for display
+    	model.addAttribute("result", fightResult);
 
-    	return "redirect:fightresult";
-    }
-    
-    // fight results
-    @RequestMapping(value = "/fightresult")
-    public String fightResults() {
-    	
     	return "fightresult";
     }
     
     // ADMIN pages
     
-    // main admin page
+    // main ADMIN page
 	@RequestMapping(value = "/admin")
     public String adminPage(Model model) {
 		
@@ -358,13 +355,9 @@ public class MorpgController {
     }
 }
 
-// Testing purposes
+// End
+// Tudor Nica, 2018
+
+// Testing purposes ONLY
 // System.out.println("==========New Test:==========");
 // System.out.println("user name = " + userName + ", char name = " + charName);
-// User test = userRepo.findByName(userName);
-// User user = userRepo.findByName(userName);
-// System.out.println(userName);
-// System.out.println(charToEdit);
-// System.out.println("==========New Test:==========");
-// users.forEach(System.out::println);
-// System.out.println(userName + ' ' + charName);

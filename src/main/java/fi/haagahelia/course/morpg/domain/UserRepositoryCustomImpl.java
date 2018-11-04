@@ -72,6 +72,25 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         return 0;
     }
     
+    public long updateCharStats(String userName, Character charToEdit, int victoriesUpdate, int defeatsUpdate) {
+    	
+        Query query = new Query(new Criteria().andOperator(
+      		  Criteria.where("name").is(userName),
+      		  Criteria.where("characters").elemMatch(Criteria.where("charName").is(charToEdit.getCharName()))
+      		));
+        
+        Update update = new Update();
+        update.set("characters.$.victories", charToEdit.getVictories() + victoriesUpdate);
+        update.set("characters.$.defeats", charToEdit.getDefeats() + defeatsUpdate);
+ 
+        UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
+ 
+        if (result != null) {
+            return result.getModifiedCount();
+        }
+        return 0;
+    }
+    
     public long deleteChar(String userName, String charName) {
  	   
 		Query query = new Query(Criteria.where("name").is(userName));

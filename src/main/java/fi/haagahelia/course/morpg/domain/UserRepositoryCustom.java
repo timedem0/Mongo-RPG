@@ -10,4 +10,6 @@ public interface UserRepositoryCustom {
 	public long updateChar(String userName, Character charToEdit);
 	public long updateCharStats(String userName, Character charToEdit, int victoriesUpdate, int defeatsUpdate);
 	public long deleteChar(String userName, String charName);
+	public long insertDefaultType(String userName, String charName);
+	public long insertDefaultWeapon(String userName, String charName);
 }

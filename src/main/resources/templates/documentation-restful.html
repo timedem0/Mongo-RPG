@@ -18,11 +18,29 @@
 	
 	<div>
 		<h4>RESTful Documentation</h4>
-		<p>POST, PUT, DELETE Status: Disabled by Spring Security Services</p>
-		<p>The following GET entry points are available, under ADMIN authority authentication:</p>
+		
+		<p>RESTful Services available under ADMIN authority authentication.</p>
+		
+		<br />
+		
+		<p>Spring Data REST Service with HAL Browser</p>
+		<p>note 1: Spring Security set to allow POST, PUT, DELETE at this entry point ONLY</p>
+		<p>note 2: This app uses a NoSQL Database. Some referential integrity check is done at app level but proceed with care.</p>
+		<ul>
+			<li><a href="/restful/api">/restful/api</a></li>
+		</ul>
+		
+		<br />
+		
+		<p>Other RESTful Services available as GET-only methods:</p>
 		
 		<ul>
 		
+			<li>/restful/fight/{userName}/{charName}/{locationName} - to get the full parameters for one fight, by user name, character name and location name<br />
+		    notes: one monster is always picked randomly from location and the die is re-rolled for every cast<br />
+		    eg: <a href="/restful/fight/testuser/Ellymoo/Forest">/restful/fight/testuser/Ellymoo/Forest</a><br /><br />
+		    </li>	
+		    
 		    <li>/restful/users - to get a list of all users<br />
 		    eg: <a href="/restful/users">/restful/users</a><br /><br />
 		    </li>
@@ -53,23 +71,8 @@
 
  		  	<li>/restful/weapons - to get a list of all weapons<br />
 		    eg: <a href="/restful/weapons">/restful/weapons</a><br /><br />
-		    </li>	
-
- 		  	<li>/restful/fight/{userName}/{charName}/{locationName} - to get the full parameters for one fight, by user name, character name and location name<br />
-		    notes: one monster is always picked randomly from location and the die is re-rolled for every cast<br />
-		    eg: <a href="/restful/fight/testuser/Ellymoo/Forest">/restful/fight/testuser/Ellymoo/Forest</a><br />
-		    
-		    </li>	
+		    </li>
 
 		</ul>
-		
-		<p>There is also available a Spring Data REST Service with HAL Browser, also under ADMIN authority authentication.</p>
-		<ul>
-			<li><a href="/restful/api">/restful/api</a></li>
-		</ul>
-		
 	</div>
-	
-	
-	
 </body>

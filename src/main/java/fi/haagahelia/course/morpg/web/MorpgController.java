@@ -31,6 +31,7 @@ import fi.haagahelia.course.morpg.domain.Weapon;
 import fi.haagahelia.course.morpg.domain.WeaponRepository;
 import fi.haagahelia.course.morpg.domain.Character;
 import fi.haagahelia.course.morpg.domain.Monster;
+import fi.haagahelia.course.morpg.domain.RefIntegrityCheck;
 import fi.haagahelia.course.morpg.domain.Location;
 import fi.haagahelia.course.morpg.domain.LocationRepository;
 import fi.haagahelia.course.morpg.domain.LocationRepositoryCustom;
@@ -109,6 +110,8 @@ public class MorpgController {
 	@RequestMapping(value = "/main")
     public String charList(Model model) {
 		
+		RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo);
+		
         model.addAttribute("users", userRepo.findAll());
         model.addAttribute("types", typeRepo.findAll());
         model.addAttribute("weapons", weapRepo.findAll());
@@ -183,6 +186,8 @@ public class MorpgController {
     // fight function
     @RequestMapping(value = "/fight", method = RequestMethod.POST)
     public String fight(FightForm newFight, Model model) {
+    	
+    	RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo);
  
     	// get the character that will fight
     	Character charToFight = userRepoCustom.findCharByName(newFight.getUserName(), newFight.getCharName());
@@ -209,6 +214,8 @@ public class MorpgController {
     // main ADMIN page
 	@RequestMapping(value = "/admin")
     public String adminPage(Model model) {
+		
+		RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo);
 		
         model.addAttribute("users", userRepo.findAll());
         model.addAttribute("types", typeRepo.findAll());

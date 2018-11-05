@@ -123,4 +123,40 @@ public class UserRepositoryCustomImpl implements UserRepositoryCustom {
         }
         return 0;
     }
+    
+    public long insertDefaultWeapon(String userName, String charName) {
+    	
+        Query query = new Query(new Criteria().andOperator(
+        		  Criteria.where("name").is(userName),
+        		  Criteria.where("characters").elemMatch(Criteria.where("charName").is(charName))
+        		));
+          
+        Update update = new Update();
+        update.set("characters.$.weapon", "Default");
+   
+        UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
+   
+        if (result != null) {
+        	return result.getModifiedCount();
+        }
+        return 0;
+    }
+    
+    public long insertDefaultType(String userName, String charName) {
+    	
+        Query query = new Query(new Criteria().andOperator(
+        		  Criteria.where("name").is(userName),
+        		  Criteria.where("characters").elemMatch(Criteria.where("charName").is(charName))
+        		));
+          
+        Update update = new Update();
+        update.set("characters.$.type", "Default");
+   
+        UpdateResult result = this.mongoTemplate.updateFirst(query, update, User.class);
+   
+        if (result != null) {
+        	return result.getModifiedCount();
+        }
+        return 0;
+    }
 }

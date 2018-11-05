@@ -28,6 +28,8 @@ public class Security extends WebSecurityConfigurerAdapter {
 			.antMatchers("/restful/**", "/api").hasAuthority("ADMIN") 
 		.anyRequest().authenticated()
 		.and()
+		.csrf().ignoringAntMatchers("/restful/api/**")
+		.and()
 		.formLogin()
 			.loginPage("/login")
 			.defaultSuccessUrl("/main")

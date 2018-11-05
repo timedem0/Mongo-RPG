@@ -45,9 +45,9 @@
 					</select>
 				</div>
 				<div>
-					<input type="text" id="victories" th:placeholder="${charToEdit.victories}" th:field="${charToEdit.victories}" required readonly />
-					<input type="text" id="defeats" th:placeholder="${charToEdit.defeats}" th:field="${charToEdit.defeats}" required readonly />
-					<input type="text" id="weapon" th:placeholder="${charToEdit.weapon}" th:field="${charToEdit.weapon}" required readonly />
+					<input type="hidden" id="victories" th:placeholder="${charToEdit.victories}" th:field="${charToEdit.victories}" required readonly />
+					<input type="hidden" id="defeats" th:placeholder="${charToEdit.defeats}" th:field="${charToEdit.defeats}" required readonly />
+					<input type="hidden" id="weapon" th:placeholder="${charToEdit.weapon}" th:field="${charToEdit.weapon}" required readonly />
 				</div>
 				<input type="hidden" name="userName" th:value="${myUser}" />				 
 				<div>

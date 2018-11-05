@@ -27,7 +27,7 @@ public class Location {
 	@Field
 	private List<Monster> monsters;
 	
-	public Location( ) {
+	public Location() {
 		this.monsters = new ArrayList<>();
 	}
 	

@@ -67,34 +67,38 @@
         <a sec:authorize="hasAuthority('ADMIN')" href="/admin">Admin Page</a><br />
         
         <div th:each="i : ${users}" th:if="${i.name} == ${#httpServletRequest.remoteUser}">
-        	<div th:unless="${i.characters.isEmpty()}">
-				<form th:object="${fight}" th:with="myUser=${#httpServletRequest.remoteUser}" th:action="@{/fight}" method="post">
+			<form th:object="${fight}" th:with="myUser=${#httpServletRequest.remoteUser}" th:action="@{/fight}" method="post">
+			
+				<input type="hidden" name="userName" th:value="${myUser}" />
 				
-					<input type="hidden" name="userName" th:value="${myUser}" />
-					
-					<div>
-						<label for="${fight.charName}">Choose Character: </label>
-						<select id="character" th:field="${fight.charName}">
-							<option th:each="j : ${i.characters}"
-									th:value="${j.charName}"
-									th:text="${j.charName}">
-							</option>
-						</select>
-					</div>
-					
-					<div>
-						<label for="${fight.locationName}">Choose Location: </label>
-						<select id="location" th:field="${fight.locationName}">
-							<option th:each="j : ${locations}"
-									th:value="${j.name}"
-									th:text="${j.description}">
-							</option>
-						</select>
-					</div>
-		
-					<input type="submit" value="Roll the die and fight!">
-				</form>
-			</div>
+				<div>
+					<label for="${fight.charName}">Choose Character: </label>
+					<select id="character" th:field="${fight.charName}">
+						<option th:each="j : ${i.characters}"
+								th:value="${j.charName}"
+								th:text="${j.charName}">
+						</option>
+					</select>
+				</div>
+				
+				<div>
+					<label for="${fight.locationName}">Choose Location: </label>
+					<select id="location" th:field="${fight.locationName}">
+						<option th:each="j : ${locations}" 
+								th:value="${j.name}"
+								th:text="${j.description}">
+						</option>
+					</select>
+				</div>
+				
+				<div id="errors">
+					<span th:if="${i.characters.isEmpty()}" th:text="${'You have no characters. Create one!'}"></span>
+					<span th:if="${locations.isEmpty()}" th:text="${'There are no possible locations. Ask the mighty Admin to create one for you.'}"></span>
+					<span th:each="j : ${locations}" th:if="${j.monsters.isEmpty()}" th:text="${'There are no monsters at the selected location. Ask the mighty Admin to create some for you.'}"></span>
+				</div>
+	
+				<input th:each="j : ${locations}" th:unless="${i.characters.isEmpty() OR locations.isEmpty() OR j.monsters.isEmpty()}" type="submit" value="Roll the dice and fight!">
+			</form>
 		</div>
         
 	</div>

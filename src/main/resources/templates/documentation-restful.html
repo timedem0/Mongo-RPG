@@ -5,74 +5,131 @@
     <meta name="author" content="Tudor Nica">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gabriela%7CShojumaru" />
+    <link rel="stylesheet" href="/css/stylesheet.css" />
 </head>
 
-<body>
+<body class="text-center">
 	
-	<div>
-		<span th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</span>
-		<form th:action="@{/logout}" method="post">
-			<input type="submit" value="Sign Out">
-		</form>
-	</div>
+	<!-- Nav Bar -->
+    <nav class="container rounded navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+        	<span th:inline="text" class="navbar-brand">Hello [[${#httpServletRequest.remoteUser}]]!</span>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+            	<ul class="navbar-nav ml-auto">
+				    <li class="nav-item">
+				        <a class="nav-link" href="/main">Main Page</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" href="/admin">Admin Page</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" href="/documentation-restful">RESTful Doc</a>
+				    </li>
+				   	<li class="nav-item">
+				        <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" href="/documentation-database">Database Doc</a>
+				    </li>
+				    <li class="nav-item">
+						<form th:action="@{/logout}" method="post">
+							<input type="submit" class="nav-link" value="Sign Out">
+						</form>
+				    </li>
+				</ul>
+            </div>
+        </div>
+    </nav>
 	
-	<div>
-		<h4>RESTful Documentation</h4>
+	<!-- Content -->
+	<div class="container top">   
+    	<h1>MORPG</h1>
+    	<br/>
+    	
+    	<div class="admin-holder rounded text-left">
+		<h3>RESTful Documentation</h3>
+		
+		<br />
 		
 		<p>RESTful Services available under ADMIN authority authentication.</p>
 		
 		<br />
 		
 		<p>Spring Data REST Service with HAL Browser</p>
-		<p>note 1: Spring Security set to allow POST, PUT, DELETE at this entry point ONLY</p>
-		<p>note 2: This app uses a NoSQL Database. Some referential integrity check is done at app level but proceed with care.</p>
 		<ul>
 			<li><a href="/restful/api">/restful/api</a></li>
 		</ul>
+		<p>
+			note 1: Spring Security set to allow POST, PUT, DELETE at this entry point ONLY<br />
+			note 2: This app uses a NoSQL Database. Some referential integrity check is done at app level but proceed with care.<br />
+			eg: Deleting a Type or a Weapon belonging to a character from their respective Collections will trigger the application to create a default Type or Weapon on next access and assign it to the Character whose integrity was broken.
+		</p>
 		
 		<br />
 		
 		<p>Other RESTful Services available as GET-only methods:</p>
 		
 		<ul>
-		
-			<li>/restful/fight/{userName}/{charName}/{locationName} - to get the full parameters for one fight, by user name, character name and location name<br />
-		    notes: one monster is always picked randomly from location and the die is re-rolled for every cast<br />
-		    eg: <a href="/restful/fight/testuser/Ellymoo/Forest">/restful/fight/testuser/Ellymoo/Forest</a><br /><br />
+			<li>/restful/fight/{userName}/{charName}/{locationName}<br />
+		    eg: <a href="/restful/fight/testuser/Ellymoo/Forest">/restful/fight/testuser/Ellymoo/Forest</a><br />
+		    to get the full parameters for one fight, by user name, character name and location name<br />
+		    note: one monster is always picked randomly from location and the die is re-rolled for every cast<br /><br />
 		    </li>	
 		    
-		    <li>/restful/users - to get a list of all users<br />
-		    eg: <a href="/restful/users">/restful/users</a><br /><br />
+		    <li>/restful/users<br />
+		    eg: <a href="/restful/users">/restful/users</a><br />
+		    to get a list of all users<br /><br />
 		    </li>
 		    
-		    <li>/restful/users/{userName} - to get one user by user name<br />
-		    eg: <a href="/restful/users/testuser">/restful/users/testuser</a><br /><br />
+		    <li>/restful/users/{userName}<br />
+		    eg: <a href="/restful/users/testuser">/restful/users/testuser</a><br />
+		    to get one user by user name<br /><br />
 		    </li>
 		    
-		  	<li>/restful/characters/{userName} - to get a list of characters belonging to a user, by user name<br />
-		    eg: <a href="/restful/characters/testuser">/restful/characters/testuser</a><br /><br />
+		  	<li>/restful/characters/{userName}<br />
+		    eg: <a href="/restful/characters/testuser">/restful/characters/testuser</a><br />
+		    to get a list of characters belonging to a user, by user name<br /><br />
 		    </li>		  
  
- 		  	<li>/restful/characters/{userName}/{charName} - to get one character belonging to a user, by user name and character name<br />
-		    eg: <a href="/restful/characters/testuser/Peticel">/restful/characters/testuser/Peticel</a><br /><br />
+ 		  	<li>/restful/characters/{userName}/{charName}<br />
+		    eg: <a href="/restful/characters/testuser/Peticel">/restful/characters/testuser/Peticel</a><br />
+		    to get one character belonging to a user, by user name and character name<br /><br />
 		    </li>	   
 
- 		  	<li>/restful/locations - to get a list of all locations<br />
-		    eg: <a href="/restful/locations">/restful/locations</a><br /><br />
+ 		  	<li>/restful/locations<br />
+		    eg: <a href="/restful/locations">/restful/locations</a><br />
+		    to get a list of all locations<br /><br />
 		    </li>	
 
- 		  	<li>/restful/monsters/{locationName} - to get a list of all monsters at a location, by location name<br />
-		    eg: <a href="/restful/monsters/Ruins">/restful/monsters/Ruins</a><br /><br />
+ 		  	<li>/restful/monsters/{locationName}<br />
+		    eg: <a href="/restful/monsters/Ruins">/restful/monsters/Ruins</a><br />
+		    to get a list of all monsters at a location, by location name<br /><br />
 		    </li>	
 
- 		  	<li>/restful/types - to get a list of all character types (classes)<br />
-		    eg: <a href="/restful/types">/restful/types</a><br /><br />
+ 		  	<li>/restful/types<br />
+		    eg: <a href="/restful/types">/restful/types</a><br />
+		    to get a list of all character types (classes)<br /><br />
 		    </li>	
 
- 		  	<li>/restful/weapons - to get a list of all weapons<br />
-		    eg: <a href="/restful/weapons">/restful/weapons</a><br /><br />
+ 		  	<li>/restful/weapons<br />
+		    eg: <a href="/restful/weapons">/restful/weapons</a><br />
+		    to get a list of all weapons<br /><br />
 		    </li>
-
 		</ul>
+		<div class="text-center">
+			<a class="btn btn-secondary" href="/admin">Back</a>
+		</div>
+		</div>
 	</div>
+	
+	<footer>
+        <div class="container">
+
+			A MongoDB School Project - &copy; 2018, Tudor Nica
+
+        </div>
+    </footer>
 </body>

@@ -7,31 +7,48 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="../css/stylesheet.css" />
+    <link rel="stylesheet" href="/css/stylesheet.css" />
+    <link href="https://fonts.googleapis.com/css?family=Gabriela%7CShojumaru" rel="stylesheet" /> 
 </head>
-<body>
-    <div>
-	    <form th:action="@{/login}" method="post">
 
-	    	<h1>Mongo RPG - Welcome</h1>
+<body class="text-center">
+
+    <div class="top">
+    
+    	<h1>MORPG</h1>
+    	<br/>
+    	
+	    <form class="form-signin rounded" th:action="@{/login}" method="post">
+	    
+	    	<h3>Welcome</h3>
 	    	<br />
-			<input type="text" name="username" placeholder="Username" required autofocus />
+			<input type="text" class="form-control" placeholder="username" name="username" required autofocus />
 			<br />
-	        <input type="password" name="password" placeholder="Password" required />
+	        <input type="password" class="form-control" placeholder="password" name="password" required />
 	        <hr />
-	        <button type="submit">Sign In</button>
+	        <button type="submit" class="btn btn-success btn-block">Sign In</button>
 	        <br />
-			<a th:href="@{/signup}">New Member</a>
+			<a class="btn btn-primary btn-block" th:href="@{/signup}">New Member</a>
 	        <br />
-	       	<div role="alert" th:if="${param.error}">
+	       	<div class="alert alert-danger" role="alert" th:if="${param.error}">
 	        	Invalid name and password!
 	    	</div>
-	    	<div role="alert" th:if="${param.logout}">
+	    	<div class="alert alert-warning" th:if="${param.logout}">
 	        	You have been logged out!
 	    	</div>
-	    	<div role="alert" th:if="${param.success}">
+	    	<div class="alert alert-success" th:if="${param.success}">
 	        	Account created successfully!
 	    	</div>
 	    </form>
     </div>
+    
+    <footer>
+        <div class="container">
+
+			A MongoDB School Project - &copy; 2018, Tudor Nica
+
+        </div>
+    </footer>
+    
 </body>
+</html>

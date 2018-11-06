@@ -13,6 +13,7 @@ public class FightResult {
 	
 	private String userName;
 	private String locationName;
+	private String locationUrl;
 	private Character character;
 	private Monster monster;
 	private Type type;
@@ -35,13 +36,14 @@ public class FightResult {
 		
 	}
 
-    public FightResult(String userName, String locationName, Character character, Monster monster,
+    public FightResult(String userName, String locationName, String locationUrl, Character character, Monster monster,
 			Type type, Weapon weapon, int dice, int diceValue, int playerResult, int monsterResult, int bonusFromAttack,
 			int bonusFromLocation, int penaltyFromMonsterAttack, int battleResult, int victoriesUpdate,
 			int defeatsUpdate) {
 
 		this.userName = userName;
 		this.locationName = locationName;
+		this.locationUrl = locationUrl;
 		this.character = character;
 		this.monster = monster;
 		this.type = type;
@@ -72,6 +74,14 @@ public class FightResult {
 
 	public void setLocationName(String locationName) {
 		this.locationName = locationName;
+	}
+	
+	public String getLocationUrl() {
+		return locationUrl;
+	}
+
+	public void setLocationUrl(String locationUrl) {
+		this.locationUrl = locationUrl;
 	}
 
 	public Character getCharacter() {

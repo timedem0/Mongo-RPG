@@ -1,13 +1,12 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
-    <title>Mongo RPG - Location Edit</title>
+    <title>Mongo RPG - Database Documentation</title>
     <meta name="author" content="Tudor Nica">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gabriela%7CShojumaru" />
     <link rel="stylesheet" href="/css/stylesheet.css" />
 </head>
@@ -49,41 +48,18 @@
 	<div class="container top">   
     	<h1>MORPG</h1>
     	<br/>
+    	
+    	<div class="admin-holder rounded text-left">
+		<h3>Database Documentation</h3>
 		
-		<!-- Location Edit -->
-    	<div class="big-holder rounded">
-        <h3>Location Reshaping</h3>
-        <br />
-			<form th:object="${locationToEdit}" th:action="@{../../updatelocation}" action="#" method="post">
-				<div class="form-row">
-					<div>
-						<input type="hidden" id="id" th:placeholder="${locationToEdit.id}" th:field="${locationToEdit.id}" required />
-					</div>
-					<div class="col-4">
-					  	<label for="name">Location Name</label>
-						<input class="form-control" type="text" id="name" th:placeholder="${locationToEdit.name}" th:field="${locationToEdit.name}" required readonly />
-					</div>
-					<div class="col-4">
-					  	<label for="description">Description</label>
-						<input class="form-control" type="text" id="description" th:placeholder="${locationToEdit.description}" th:field="${locationToEdit.description}" required />
-					</div>
-					<div class="col-4">
-						<label for="picture">Picture URL</label>
-						<input class="form-control" type="text" id="picture" th:placeholder="${locationToEdit.picture}" th:field="${locationToEdit.picture}" required />
-					</div>
-				</div>
-				<br /> 
-				<div>
-					<a class="btn btn-secondary" href="/admin">Back</a>
-				    <button class="btn btn-warning" type="reset">Reset</button>
-				    <button class="btn btn-success" type="submit" value="Save">Save</button>
-				</div>
-			</form>
+		<br />
+		
+
+		<div class="text-center">
+			<a class="btn btn-secondary" href="/admin">Back</a>
+		</div>
 		</div>
 	</div>
-		
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 	
 	<footer>
         <div class="container">
@@ -92,5 +68,4 @@
 
         </div>
     </footer>
-	
 </body>

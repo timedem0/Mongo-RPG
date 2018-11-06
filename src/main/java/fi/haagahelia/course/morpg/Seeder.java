@@ -59,9 +59,9 @@ public class Seeder implements CommandLineRunner {
 		Monster ripper = new Monster("Ripper", 60, 80, "physical", "nature");
 		
 		// create new locations
-		Location ruins = new Location("Ruins", "A dark and hollow place", "url", Arrays.asList(harpy, skeleton, vampire));
-		Location forest = new Location("Forest", "An enchanted elvish forest", "url", Arrays.asList(ancient, wolf, satyr));
-		Location hospital = new Location("Hospital", "An abandoned mental institution", "url", Arrays.asList(rat, maniac, ripper));
+		Location ruins = new Location("Ruins", "A dark and hollow place", "ruins.jpg", Arrays.asList(harpy, skeleton, vampire));
+		Location forest = new Location("Forest", "An enchanted elvish forest", "forest.jpg", Arrays.asList(ancient, wolf, satyr));
+		Location hospital = new Location("Hospital", "An abandoned mental institution", "hospital.jpg", Arrays.asList(rat, maniac, ripper));
 		
 		// create new characters
 		Character cerise = new Character("Cerise", "A sweet girl from a small village", druid.getTypeName(), stick.getWeaponName(), 0, 0);

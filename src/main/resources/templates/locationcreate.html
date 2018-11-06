@@ -7,52 +7,90 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gabriela%7CShojumaru" />
     <link rel="stylesheet" href="/css/stylesheet.css" />
 </head>
 
-<body>
+<body class="text-center">
 	
-	<div>
-		<span th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</span>
-		<form th:action="@{/logout}" method="post">
-			<input type="submit" value="Sign Out">
-		</form>
-	</div>
+	<!-- Nav Bar -->
+    <nav class="container rounded navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+        	<span th:inline="text" class="navbar-brand">Hello [[${#httpServletRequest.remoteUser}]]!</span>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+            	<ul class="navbar-nav ml-auto">
+				    <li class="nav-item">
+				        <a class="nav-link" href="/main">Main Page</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" href="/admin">Admin Page</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" href="/documentation-restful">RESTful Doc</a>
+				    </li>
+				   	<li class="nav-item">
+				        <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" href="/documentation-database">Database Doc</a>
+				    </li>
+				    <li class="nav-item">
+						<form th:action="@{/logout}" method="post">
+							<input type="submit" class="nav-link" value="Sign Out">
+						</form>
+				    </li>
+				</ul>
+            </div>
+        </div>
+    </nav>
 	
-	<div>
-
-		<h1>Location Creation</h1>
-		<br />
+	<!-- Content -->
+	<div class="container top">   
+    	<h1>MORPG</h1>
+    	<br/>
 		
-		<div>
-		
+		<!-- Location Creation -->
+    	<div class="big-holder rounded">
+        <h3>Location Design</h3>
+        <br />
 			<form th:object="${newLocation}" th:action="@{/savelocation}" action="#" method="post">	
-
-				<div>
-				  	<label for="name">Location Name: </label>
-					<input type="text" id="name" placeholder="" th:field="${newLocation.name}" required />
+				<div class="form-row">
+					<div class="col-4">
+					  	<label for="name">Location Name</label>
+						<input class="form-control" type="text" id="name" placeholder="" th:field="${newLocation.name}" required />
+					</div>
+					<div class="col-4">
+					  	<label for="description">Description</label>
+						<input class="form-control" type="text" id="description" placeholder="" th:field="${newLocation.description}" required />
+					</div>
+					<div class="col-4">
+					  	<label for="picture">Picture Link</label>
+						<input class="form-control" type="text" id="picture" placeholder="" th:field="${newLocation.picture}" required />
+					</div>
 				</div>
-				<div th:text=${errorMessage}></div>
-				<div>
-				  	<label for="description">Description: </label>
-					<input type="text" id="description" placeholder="" th:field="${newLocation.description}" required />
+				<br />
+				<div class="form-row" th:unless="${errorMessage == null}">
+						<div class="col-4 alert alert-danger" role="alert" th:text=${errorMessage}></div>
 				</div>
 				<div>
-				  	<label for="picture">Picture Link: </label>
-					<input type="text" id="picture" placeholder="" th:field="${newLocation.picture}" required />
+					<a class="btn btn-secondary" href="/admin">Back</a>
+				    <button class="btn btn-warning" type="reset">Reset</button>
+				    <button class="btn btn-success" type="submit" value="Save">Save</button>
 				</div>
-				<div>
-					<a href="/admin">Back</a>
-				    <button type="reset">Reset</button>
-				    <input type="submit" value="Save" />
-				</div>
- 				
 			</form>
-		
 		</div>
 	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>	
-	
+
+    <footer>
+        <div class="container">
+
+			A MongoDB School Project - &copy; 2018, Tudor Nica
+
+        </div>
+    </footer>
+    	
 </body>

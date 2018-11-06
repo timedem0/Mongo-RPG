@@ -192,13 +192,14 @@ public class MorpgController {
     	// get the character that will fight
     	Character charToFight = userRepoCustom.findCharByName(newFight.getUserName(), newFight.getCharName());
     	
-    	// get all character types, all weapons and all monsters
+    	// get location, all character types, all weapons and all monsters
+    	Location location = locoRepo.findByName(newFight.getLocationName());
     	List<Type> allTypes = typeRepo.findAll();
     	List<Weapon> allWeapons = weapRepo.findAll();
     	List<Monster> allMonsters = locoRepoCustom.findMonsterByLocation(newFight.getLocationName());
     	
     	// get the result of the fight    	
-    	FightResult fightResult = Fight.getFightResult(newFight.getUserName(), charToFight, newFight.getLocationName(), allMonsters, allTypes, allWeapons);
+    	FightResult fightResult = Fight.getFightResult(newFight.getUserName(), charToFight, location, allMonsters, allTypes, allWeapons);
     	
     	// update the character statistics
     	userRepoCustom.updateCharStats(fightResult.getUserName(), fightResult.getCharacter(), fightResult.getVictoriesUpdate(), fightResult.getDefeatsUpdate());
@@ -361,6 +362,13 @@ public class MorpgController {
     	return "documentation-restful";
     }
     
+    // database documentation page
+    @RequestMapping(value = "/documentation-database")
+    public String documentationDB() {
+    	
+    	return "documentation-database";
+    }
+    
     // RESTful services
     
     @RequestMapping(value="/restful/users", method = RequestMethod.GET)
@@ -417,13 +425,14 @@ public class MorpgController {
     	// get the character that will fight
     	Character charToFight = userRepoCustom.findCharByName(userName, charName);
     	
-    	// get all character types, all weapons and all monsters
+    	// get location, all character types, all weapons and all monsters
+    	Location location = locoRepo.findByName(locationName);
     	List<Type> allTypes = typeRepo.findAll();
     	List<Weapon> allWeapons = weapRepo.findAll();
     	List<Monster> allMonsters = locoRepoCustom.findMonsterByLocation(locationName);
     	
     	// get the result of the fight    	
-    	FightResult fightResult = Fight.getFightResult(userName, charToFight, locationName, allMonsters, allTypes, allWeapons);    	
+    	FightResult fightResult = Fight.getFightResult(userName, charToFight, location, allMonsters, allTypes, allWeapons);    	
     	
     	return (FightResult) fightResult;
     }

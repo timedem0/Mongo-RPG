@@ -7,90 +7,133 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gabriela%7CShojumaru" />
+    <link rel="stylesheet" href="/css/stylesheet.css" />
 </head>
 
-<body>
+<body class="text-center">
 	
-	<div>
-		<span th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</span>
-		<form th:action="@{/logout}" method="post">
-			<input type="submit" value="Sign Out">
-		</form>
-	</div>
+	<!-- Nav Bar -->
+    <nav class="container rounded navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+        	<span th:inline="text" class="navbar-brand">Hello [[${#httpServletRequest.remoteUser}]]!</span>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+            	<ul class="navbar-nav ml-auto">
+				    <li class="nav-item">
+				        <a class="nav-link" href="/main">Main Page</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" href="/admin">Admin Page</a>
+				    </li>
+				    <li class="nav-item">
+				        <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" href="/documentation-restful">RESTful Doc</a>
+				    </li>
+				   	<li class="nav-item">
+				        <a class="nav-link" sec:authorize="hasAuthority('ADMIN')" href="/documentation-database">Database Doc</a>
+				    </li>
+				    <li class="nav-item">
+						<form th:action="@{/logout}" method="post">
+							<input type="submit" class="nav-link" value="Sign Out">
+						</form>
+				    </li>
+				</ul>
+            </div>
+        </div>
+    </nav>
 	
-	<div>  
-	 
-        <h3>List of Users</h3>
-        <br />
-        
-        <table>
-            <thead>
-              <tr>
-                <th scope="col">Name </th>
-                <th scope="col">Characters </th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody th:each="i : ${users}">
-                <tr th:if="${i.role} == 'USER'">
-                    <th th:text="${i.name}"></th>
-                    <td>
-                    	<ul th:each="j : ${i.characters}">
-                    		<li th:text="${j.charName}"></li>
-                    	</ul>
-                    </td>
-                    <td><a th:href="@{/deleteuser/{userName}(userName=${i.name})}">Delete</a></td>
-                </tr>
-            </tbody>
-        </table>
-            
+	<!-- Content -->
+	<div class="container top">   
+    	<h1>MORPG</h1>
+    	<br/>
+    	
+        <!-- Location Table -->
+    	<div class="big-holder rounded">
         <h3>List of Locations</h3>
         <br />
         
-        <table>
+        <table class="table table-hover table-light responsive">
             <thead>
               <tr>
                 <th scope="col">Name </th>
                 <th scope="col">Description </th>
-                <th scope="col">Image Location</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
+                <th scope="col">Image File Name</th>
                 <th scope="col">Monsters Present</th>
               </tr>
             </thead>
             <tbody>
                 <tr th:each="i : ${locations}">
-                    <th th:text="${i.name}"></th>
+                    <th>
+                    	<span th:text="${i.name}"></span><br />
+                    	<a th:href="@{/editlocation/{locationName}(locationName=${i.name})}"><i class="fas fa-edit"></i></a>
+                    	<a th:href="@{/deletelocation/{locationName}(locationName=${i.name})}"><i class="fas fa-trash-alt"></i></a>
+                    </th>
                     <td th:text="${i.description}"></td>
                     <td th:text="${i.picture}"></td>
-                    <td><a th:href="@{/editlocation/{locationName}(locationName=${i.name})}">Edit</a></td>
-                    <td><a th:href="@{/deletelocation/{locationName}(locationName=${i.name})}">Delete</a></td>
                     <td>
-                   		<ul th:each="j : ${i.monsters}">
-                   			<li>
-	                   			<span th:text="${j.monsterName}"></span>
-	                   			<a th:href="@{/editmonster/{locationName}/{monsterName}(locationName=${i.name},monsterName=${j.monsterName})}">Edit</a>
-	                   			<a th:href="@{/deletemonster/{locationName}/{monsterName}(locationName=${i.name},monsterName=${j.monsterName})}">Delete</a>	
+                   		<ul class="list-group list-group-flush" th:each="j : ${i.monsters}">
+                   			<li class="list-group-item text-right">
+	                   			<span th:text="${j.monsterName}"></span>&nbsp;&nbsp;
+	                   			<a th:href="@{/editmonster/{locationName}/{monsterName}(locationName=${i.name},monsterName=${j.monsterName})}"><i class="fas fa-edit text-right"></i></a>
+	                   			<a th:href="@{/deletemonster/{locationName}/{monsterName}(locationName=${i.name},monsterName=${j.monsterName})}"><i class="fas fa-trash-alt"></i></a>	
                    			</li>
                    		</ul>
-                   		<a th:href="@{/newmonster/{locationName}(locationName=${i.name})}">Create New Monster</a><br />   
+                   		<a class="btn btn-sm btn-block btn-success" th:href="@{/newmonster/{locationName}(locationName=${i.name})}">Create New Monster</a><br />   
                     </td>
                 </tr>
-                <tr>
-                	<td>
-                		<a sec:authorize="hasAuthority('ADMIN')" href="/newlocation">Create New Location</a><br />   
-                	</td>
-                </tr>
-            </tbody>
-            
+            </tbody>         
         </table>
         
-        <a href="/main">Back</a><br />
+        <a class="btn btn-secondary" th:href="@{/main}">Back</a>
+        <a class="btn btn-success" sec:authorize="hasAuthority('ADMIN')" href="/newlocation">Create New Location</a>
                   
-        <a sec:authorize="hasAuthority('ADMIN')" href="/documentation-restful">RESTful Documentation</a><br />
-        <a sec:authorize="hasAuthority('ADMIN')" href="/documentation-database">Database Documentation</a>
+		</div>
+		
+		<br />
+		
+		<!-- Users Table -->
+    	<div class="big-holder rounded">
+    	<h3>List of Users and their Characters</h3>
+    	<br />
+        
+	        <table class="table table-hover table-light responsive">
+	            <thead>
+	              <tr>
+	                <th scope="col">Name </th>
+	                <th scope="col">Characters </th>
+	              </tr>
+	            </thead>
+	            <tbody th:each="i : ${users}">
+	                <tr th:if="${i.role} == 'USER'">
+	                    <th>
+	                    	<span th:text="${i.name}"></span><br />
+	                    	<a th:href="@{/deleteuser/{userName}(userName=${i.name})}"><i class="fas fa-trash-alt"></i></a>
+	                    </th>
+	                    <td>
+	                    	<ul class="list-group list-group-flush" th:each="j : ${i.characters}">
+	                    		<li class="list-group-item" th:text="${j.charName}"></li>
+	                    	</ul>
+	                    </td>
+	                </tr>
+	            </tbody>
+	        </table>
+	        
+	        <a class="btn btn-secondary" th:href="@{/main}">Back</a>
+	        
+        </div>
     
     </div>
+    
+    <footer>
+        <div class="container">
+
+			A MongoDB School Project - &copy; 2018, Tudor Nica
+
+        </div>
+    </footer>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>

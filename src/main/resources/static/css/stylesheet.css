@@ -1,16 +1,57 @@
-
-.site {
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-    -o-background-size: cover;
-    font-family: 'Muli', sans-serif;
+body {
+	background: linear-gradient(322deg, #000000, #5b4f4f);
+	background-size: 400% 400%;
+	
+	-webkit-animation: morpg 20s ease infinite;
+	-moz-animation: morpg 20s ease infinite;
+	-o-animation: morpg 20s ease infinite;
+	animation: morpg 20s ease infinite;
+	
+	font-family: 'Gabriela', cursive;
+	
+	/*
+	font-family: 'Krub', sans-serif;
+	*/
 }
 
 h1 {
-	font-family: 'Nothing You Could Do', cursive;
+    font-family: 'Shojumaru', cursive;
+    color: white;
 	font-weight: bold;
 	text-align: center;
+}
+
+h2, h3 {
+    font-family: 'Gabriela', cursive;
+    color: black;
+	font-weight: bold;
+	text-align: center;
+}
+
+.navbar {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.intro-text {
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: .8em;
+    animation: 2s ease-out 0s 1 animationIntroText;
+}
+
+#stats {
+	opacity: 0;
+	animation-name: animationIntroText;
+	animation-duration: 1s;
+	animation-fill-mode: forwards;
+	animation-delay: 3s;
+}
+
+input[type=submit] {
+	border: none; 
+	background: none; 
+	display: inline;
+	cursor: pointer;
 }
 
 .top {
@@ -24,15 +65,20 @@ h1 {
 
 .big-holder {
     padding: 3em;
-    background-color: #e3f2fd;
+    background-color: #f7ebb7;
+}
+
+.admin-holder {
+    padding: 3em;
+    background-color: white;
 }
 
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-	background-color: #e3f2fd;
+	background-color: #f7ebb7;
 }
 
 .form-signin {
-	background-color: #e3f2fd;
+	background-color: #f7ebb7;
 	width: 100%;
 	max-width: 330px;
 	padding: 15px;
@@ -52,4 +98,45 @@ h1 {
 
 .form-error {
 	color: darkred;
+}
+
+#myAccordion {
+	margin-top: 9px;
+}
+
+footer {
+    color: white;
+}
+
+@-webkit-keyframes morpg {
+    0% {background-position:0% 50%}
+    50% {background-position:100% 50%}
+    100% {background-position:0% 50%}
+}
+
+@-moz-keyframes morpg {
+    0% {background-position:0% 50%}
+    50% {background-position:100% 50%}
+    100% {background-position:0% 50%}
+}
+
+@-o-keyframes morpg {
+    0% {background-position:0% 50%}
+    50% {background-position:100% 50%}
+    100% {background-position:0% 50%}
+}
+
+@keyframes morpg {
+    0% {background-position:0% 50%}
+    50% {background-position:100% 50%}
+    100% {background-position:0% 50%}
+}
+
+@keyframes animationIntroText {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

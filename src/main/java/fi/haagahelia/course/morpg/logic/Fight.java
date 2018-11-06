@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import fi.haagahelia.course.morpg.domain.Character;
+import fi.haagahelia.course.morpg.domain.Location;
 import fi.haagahelia.course.morpg.domain.Monster;
 import fi.haagahelia.course.morpg.domain.Type;
 import fi.haagahelia.course.morpg.domain.Weapon;
 
 public class Fight {
 	
-	public static FightResult getFightResult (String userName, Character charToFight, String locationName, List<Monster> allMonsters, List<Type> allTypes, List<Weapon> allWeapons) {
+	public static FightResult getFightResult (String userName, Character charToFight, Location location, List<Monster> allMonsters, List<Type> allTypes, List<Weapon> allWeapons) {
 		
 		// initiating the result and player statistics
 		int battleResult = 0;
@@ -19,6 +20,10 @@ public class Fight {
 		
     	// simulate a dice roll
     	int dice = ThreadLocalRandom.current().nextInt(1, 7);
+    	
+    	// get the location strings
+    	String locationName = location.getName();
+    	String locationUrl = location.getPicture();
     	
     	// get the player type
     	Type playerType = new Type();
@@ -72,6 +77,7 @@ public class Fight {
 		monsterDefence = monsterToFight.getDefence();
 		monsterAttackType = monsterToFight.getAttackType();
 		monsterVulnerability = monsterToFight.getVulnerability();
+		
 		
 		// calculating the bonuses
 		if (charTerrain.equals(locationName)) {
@@ -158,7 +164,7 @@ public class Fight {
 		}
 		
 		// creating and returning the fight result
-		FightResult resultObj = new FightResult(userName, locationName, charToFight, monsterToFight, playerType, playerWeapon,
+		FightResult resultObj = new FightResult(userName, locationName, locationUrl, charToFight, monsterToFight, playerType, playerWeapon,
 										dice, diceValue, playerTotal, monsterTotal, bonusFromAttack, bonusFromLocation, penaltyFromMonsterAttack,
 										battleResult, victoriesUpdate, defeatsUpdate);
 		

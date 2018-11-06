@@ -1,12 +1,6 @@
 body {
 	background: linear-gradient(322deg, #000000, #5b4f4f);
-	background-size: 400% 400%;
-	
-	-webkit-animation: morpg 20s ease infinite;
-	-moz-animation: morpg 20s ease infinite;
-	-o-animation: morpg 20s ease infinite;
-	animation: morpg 20s ease infinite;
-	
+	background-size: 200% 200%;
 	font-family: 'Gabriela', cursive;
 	
 	/*
@@ -36,6 +30,15 @@ h2, h3 {
     background: rgba(0, 0, 0, 0.6);
     color: white;
     padding: .8em;
+    opacity: 0;
+   	animation-name: animationIntroText;
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+	animation-delay: 1.5s;
+}
+
+.transparent-holder {
+    padding: .8em;
     animation: 2s ease-out 0s 1 animationIntroText;
 }
 
@@ -44,7 +47,7 @@ h2, h3 {
 	animation-name: animationIntroText;
 	animation-duration: 1s;
 	animation-fill-mode: forwards;
-	animation-delay: 3s;
+	animation-delay: 4.5s;
 }
 
 input[type=submit] {

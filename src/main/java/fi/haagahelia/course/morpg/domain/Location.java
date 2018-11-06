@@ -28,7 +28,10 @@ public class Location {
 	private List<Monster> monsters;
 	
 	public Location() {
-		this.monsters = new ArrayList<>();
+		Monster m = new Monster("Rat", 1, 1, "physical", "fire");
+		List<Monster> monsters = new ArrayList<>();
+		monsters.add(m);
+		this.monsters = monsters;
 	}
 	
 	public Location(String name, String description, String picture, List<Monster> monsters) {

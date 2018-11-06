@@ -54,23 +54,25 @@ public class Seeder implements CommandLineRunner {
 		Monster ancient = new Monster("Ancient", 10, 50, "fire", "nature");
 		Monster satyr = new Monster("Satyr", 70, 20, "nature", "fire");
 		
-		Monster rat = new Monster("Rat", 10, 20, "physical", "fire");
+		Monster cockroach = new Monster("Cockroach", 10, 20, "physical", "fire");
 		Monster maniac = new Monster("Maniac", 70, 5, "nature", "fire");
 		Monster ripper = new Monster("Ripper", 60, 80, "physical", "nature");
 		
 		// create new locations
 		Location ruins = new Location("Ruins", "A dark and hollow place", "ruins.jpg", Arrays.asList(harpy, skeleton, vampire));
 		Location forest = new Location("Forest", "An enchanted elvish forest", "forest.jpg", Arrays.asList(ancient, wolf, satyr));
-		Location hospital = new Location("Hospital", "An abandoned mental institution", "hospital.jpg", Arrays.asList(rat, maniac, ripper));
+		Location hospital = new Location("Hospital", "An abandoned mental institution", "hospital.jpg", Arrays.asList(cockroach, maniac, ripper));
 		
 		// create new characters
 		Character cerise = new Character("Cerise", "A sweet girl from a small village", druid.getTypeName(), stick.getWeaponName(), 0, 0);
 		Character peticel = new Character("Peticel", "A mighty warrior from Thunder Bluff", warrior.getTypeName(), sword.getWeaponName(), 7, 2);
 		Character ellymoo = new Character("Ellymoo", "A wise spell weaver from the plains of Mulgore", mage.getTypeName(), staff.getWeaponName(), 3, 0);
+		Character eilie = new Character("Eilie", "A tiny and ambicious goblinette with green hair", mage.getTypeName(), staff.getWeaponName(), 5, 1);
+		Character kinkku = new Character("Kinkku", "A roaring and belching giant woodcutter from Tammela", warrior.getTypeName(), skull.getWeaponName(), 99, 0);
 		
 		// create new users
-		User admin = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN", Arrays.asList());
-		User user = new User("testuser", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",  Arrays.asList(cerise, peticel, ellymoo));
+		User admin = new User("admin", "$2a$10$0MMwY.IQqpsVc1jC8u7IJ.2rT8b0Cd3b3sfIBGV2zfgnPGtT4r0.C", "ADMIN", Arrays.asList(eilie, kinkku));
+		User user = new User("user", "$2a$06$3jYRJrg0ghaaypjZ/.g4SethoeA51ph3UD4kZi9oPkeMTpjKU5uo6", "USER",  Arrays.asList(cerise, peticel, ellymoo));
 		
 		// drop all previous users and types, if any
 		this.userRepo.deleteAll();

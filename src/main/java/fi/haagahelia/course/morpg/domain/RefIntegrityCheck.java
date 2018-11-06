@@ -5,18 +5,19 @@ import java.util.List;
 
 public class RefIntegrityCheck {
 	
-    public static void check(UserRepository userRepo, UserRepositoryCustom userRepoCustom, TypeRepository typeRepo, WeaponRepository weapRepo) {
+    public static void check(UserRepository userRepo, UserRepositoryCustom userRepoCustom, TypeRepository typeRepo, WeaponRepository weapRepo, LocationRepository locoRepo, LocationRepositoryCustom locoRepoCustom) {
         
     	// initialize everything
         List<User> allUsers = userRepo.findAll();
         List<Type> allTypes = typeRepo.findAll();
         List<Weapon> allWeapons = weapRepo.findAll();
+        List<Location> allLocations = locoRepo.findAll();
         List<String> allTypeNames = new ArrayList<String>();
         List<String> allWeaponNames = new ArrayList<String>();
         
         // create a default type
         Type defaultType = new Type();
-        defaultType.setTypeName("Default");
+        defaultType.setTypeName("Peasant");
         defaultType.setAttack(1);
         defaultType.setDefence(1);
         defaultType.setAttackType("physical");
@@ -24,10 +25,10 @@ public class RefIntegrityCheck {
         defaultType.setTerrain("Air");
         
         // create a default weapon
-        Weapon defaultWeapon = new Weapon();
-        defaultWeapon.setWeaponName("Default");
-        defaultWeapon.setWeaponText("Tsk tsk, someone messed the referential integrity");
-        defaultWeapon.setPower(1);
+        Weapon defaultWeapon = new Weapon("Knife", "Dull knife", 1);
+        
+        // create a default monster
+        Monster defaultMonster = new Monster("Rat", 1, 1, "physical", "fire");
         
         // check if someone deleted everything from Types and Weapons Collections
         if (allTypes == null) {
@@ -48,7 +49,7 @@ public class RefIntegrityCheck {
 		// iterate through all Characters and check for missing Types and Weapons
 		// if found, insert defaults
         for (User u : allUsers) {
-        	List <Character> userChars = userRepoCustom.findCharsByUser(u.getName());
+        	List<Character> userChars = userRepoCustom.findCharsByUser(u.getName());
         	for (Character c : userChars) {
         		if (!allTypeNames.contains(c.getType())) {
         			if (!allTypeNames.contains("Default")) { // check if Default Type already exists - if not, insert
@@ -62,6 +63,14 @@ public class RefIntegrityCheck {
         			}
         			userRepoCustom.insertDefaultWeapon(u.getName(), c.getCharName()); // add Default Weapon to Character
         		}
+        	}
+        }
+		// iterate through all Locations and check for missing Monsters
+		// if found, insert default
+        for (Location l : allLocations) {
+        	List<Monster> monstersAtLocation = locoRepoCustom.findMonsterByLocation(l.getName());
+        	if (monstersAtLocation.isEmpty()) {
+        		locoRepoCustom.insertMonster(l.getName(), defaultMonster);
         	}
         }
     }

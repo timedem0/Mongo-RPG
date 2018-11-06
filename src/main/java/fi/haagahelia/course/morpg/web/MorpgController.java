@@ -110,7 +110,7 @@ public class MorpgController {
 	@RequestMapping(value = "/main")
     public String charList(Model model) {
 		
-		RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo);
+		RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo, locoRepo, locoRepoCustom);
 		
         model.addAttribute("users", userRepo.findAll());
         model.addAttribute("types", typeRepo.findAll());
@@ -187,7 +187,7 @@ public class MorpgController {
     @RequestMapping(value = "/fight", method = RequestMethod.POST)
     public String fight(FightForm newFight, Model model) {
     	
-    	RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo);
+    	RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo, locoRepo, locoRepoCustom);
  
     	// get the character that will fight
     	Character charToFight = userRepoCustom.findCharByName(newFight.getUserName(), newFight.getCharName());
@@ -216,7 +216,7 @@ public class MorpgController {
 	@RequestMapping(value = "/admin")
     public String adminPage(Model model) {
 		
-		RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo);
+		RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo, locoRepo, locoRepoCustom);
 		
         model.addAttribute("users", userRepo.findAll());
         model.addAttribute("types", typeRepo.findAll());

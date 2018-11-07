@@ -142,8 +142,12 @@ public class MorpgController {
     // character creation function
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String saveCharacter(String userName, Character charToCreate, RedirectAttributes ra) {
-	  	    	
-    	if (userRepoCustom.findCharByName(userName, charToCreate.getCharName()) == null) { // check if character name exists
+	  	
+    	// set the new character name to upper case
+    	charToCreate.setCharName(charToCreate.getCharName().substring(0, 1).toUpperCase() + charToCreate.getCharName().substring(1));
+    	
+    	// check if character name exists
+    	if (userRepoCustom.findCharByName(userName, charToCreate.getCharName()) == null) {
     		userRepoCustom.insertChar(userName, charToCreate);
     	} else {
 	        ra.addFlashAttribute("errorMessage", "Character already exists");
@@ -246,8 +250,12 @@ public class MorpgController {
     // location creation function
     @RequestMapping(value = "/savelocation", method = RequestMethod.POST)
     public String saveLocation(Location locationToCreate, RedirectAttributes ra) {
-	  	    	
-    	if (locoRepo.findByName(locationToCreate.getName()) == null) { // check if location name exists
+    	
+    	// set the new location name to upper case
+    	locationToCreate.setName(locationToCreate.getName().substring(0, 1).toUpperCase() + locationToCreate.getName().substring(1));
+	  	
+    	// check if location name exists
+    	if (locoRepo.findByName(locationToCreate.getName()) == null) {
     		locoRepo.insert(locationToCreate);
     	} else {
 	        ra.addFlashAttribute("errorMessage", "Location already exists");
@@ -299,15 +307,17 @@ public class MorpgController {
     @RequestMapping(value = "/savemonster", method = RequestMethod.POST)
     public String saveMonster(String locationName, Monster monsterToCreate, RedirectAttributes ra) {
     	
+    	// set the new monster name to upper case
+    	monsterToCreate.setMonsterName(monsterToCreate.getMonsterName().substring(0, 1).toUpperCase() + monsterToCreate.getMonsterName().substring(1));
+    	
+    	// check if monster name exists
 		List<Monster> monstersAtLocation = locoRepoCustom.findMonsterByLocation(locationName);
 		int count = 0;
-		
 		for (Monster m : monstersAtLocation) {
 			if (m.getMonsterName().equals(monsterToCreate.getMonsterName())) {
 				count++;
 			}
 		}
-		
 		if (count == 0) {
 			locoRepoCustom.insertMonster(locationName, monsterToCreate);
 		} else {

@@ -102,7 +102,8 @@
 					<input type="hidden" name="userName" th:value="${myUser}" />				 
 					<br />
 					<div>
-						<a class="btn btn-secondary" sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin}">Back</a>
+						<a class="btn btn-secondary" sec:authorize="hasAuthority('ADMIN')" th:href="@{/main}">Main Page</a>
+						<a class="btn btn-secondary" sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin}">Admin Page</a>
 						<a class="btn btn-secondary" sec:authorize="hasAuthority('USER')" th:href="@{/main}">Back</a>
 					    <button class="btn btn-warning" type="reset">Reset</button>
 					    <button class="btn btn-success" type="submit">Save</button>

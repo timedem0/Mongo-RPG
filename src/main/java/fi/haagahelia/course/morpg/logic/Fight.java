@@ -11,16 +11,13 @@ import fi.haagahelia.course.morpg.domain.Weapon;
 
 public class Fight {
 	
-	public static FightResult getFightResult (String userName, Character charToFight, Location location, List<Monster> allMonsters, List<Type> allTypes, List<Weapon> allWeapons) {
+	public static FightResult getFightResult (String userName, Character charToFight, Location location, List<Monster> allMonsters, List<Type> allTypes, List<Weapon> allWeapons, int dice) {
 		
 		// initiating the result and player statistics
 		int battleResult = 0;
 		int victoriesUpdate = 0;
 		int defeatsUpdate = 0;
-		
-    	// simulate a dice roll
-    	int dice = ThreadLocalRandom.current().nextInt(1, 7);
-    	
+		 	
     	// get the location strings
     	String locationName = location.getName();
     	String locationUrl = location.getPicture();

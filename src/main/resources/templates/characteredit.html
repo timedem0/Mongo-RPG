@@ -87,15 +87,23 @@
 							</div>						  	
 						</div>
 					</div>
+					<br />
+					<div class="form-row" sec:authorize="hasAuthority('ADMIN')">	
+						<div class="col-6">
+							<input type="number" class="form-control" id="victories" th:placeholder="${charToEdit.victories}" th:field="${charToEdit.victories}" required />
+						</div>
+						<div class="col-6">
+							<input type="number" class="form-control" id="defeats" th:placeholder="${charToEdit.defeats}" th:field="${charToEdit.defeats}" required />
+						</div>
+					</div>
 					<div>
-						<input type="hidden" id="victories" th:placeholder="${charToEdit.victories}" th:field="${charToEdit.victories}" required readonly />
-						<input type="hidden" id="defeats" th:placeholder="${charToEdit.defeats}" th:field="${charToEdit.defeats}" required readonly />
 						<input type="hidden" id="weapon" th:placeholder="${charToEdit.weapon}" th:field="${charToEdit.weapon}" required readonly />
 					</div>
 					<input type="hidden" name="userName" th:value="${myUser}" />				 
 					<br />
 					<div>
-						<a class="btn btn-secondary" th:href="@{/main}">Back</a>
+						<a class="btn btn-secondary" sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin}">Back</a>
+						<a class="btn btn-secondary" sec:authorize="hasAuthority('USER')" th:href="@{/main}">Back</a>
 					    <button class="btn btn-warning" type="reset">Reset</button>
 					    <button class="btn btn-success" type="submit">Save</button>
 					</div>

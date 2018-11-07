@@ -114,7 +114,11 @@
 	                    </th>
 	                    <td>
 	                    	<ul class="list-group list-group-flush" th:each="j : ${i.characters}">
-	                    		<li class="list-group-item" th:text="${j.charName}"></li>
+	                    		<li class="list-group-item text-left">
+	                    			<a th:href="@{/edit/{userName}/{charName}(userName=${i.name},charName=${j.charName})}"><i class="fas fa-edit"></i></a>
+	                    			<a th:href="@{/delete/{userName}/{charName}(userName=${i.name},charName=${j.charName})}"><i class="fas fa-trash-alt"></i></a>
+	                    			&nbsp;&nbsp;<span th:text="${j.charName}"></span>
+	                    		</li>		
 	                    	</ul>
 	                    </td>
 	                </tr>

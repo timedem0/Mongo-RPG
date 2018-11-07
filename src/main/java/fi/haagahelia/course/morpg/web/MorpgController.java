@@ -199,7 +199,7 @@ public class MorpgController {
     	List<Monster> allMonsters = locoRepoCustom.findMonsterByLocation(newFight.getLocationName());
     	
     	// get the result of the fight    	
-    	FightResult fightResult = Fight.getFightResult(newFight.getUserName(), charToFight, location, allMonsters, allTypes, allWeapons);
+    	FightResult fightResult = Fight.getFightResult(newFight.getUserName(), charToFight, location, allMonsters, allTypes, allWeapons, newFight.getDice());
     	
     	// update the character statistics
     	userRepoCustom.updateCharStats(fightResult.getUserName(), fightResult.getCharacter(), fightResult.getVictoriesUpdate(), fightResult.getDefeatsUpdate());
@@ -425,6 +425,9 @@ public class MorpgController {
     	// get the character that will fight
     	Character charToFight = userRepoCustom.findCharByName(userName, charName);
     	
+    	// simulate a dice roll
+    	int dice = ThreadLocalRandom.current().nextInt(1, 7);
+    	
     	// get location, all character types, all weapons and all monsters
     	Location location = locoRepo.findByName(locationName);
     	List<Type> allTypes = typeRepo.findAll();
@@ -432,7 +435,7 @@ public class MorpgController {
     	List<Monster> allMonsters = locoRepoCustom.findMonsterByLocation(locationName);
     	
     	// get the result of the fight    	
-    	FightResult fightResult = Fight.getFightResult(userName, charToFight, location, allMonsters, allTypes, allWeapons);    	
+    	FightResult fightResult = Fight.getFightResult(userName, charToFight, location, allMonsters, allTypes, allWeapons, dice);    	
     	
     	return (FightResult) fightResult;
     }

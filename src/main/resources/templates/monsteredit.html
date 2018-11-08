@@ -56,25 +56,25 @@
         <br />
 			<form th:object="${monsterToEdit}" th:with="parentLocation=${locationName}" th:action="@{../../updatemonster}" action="#" method="post">	
 				<div class="form-row">
-					<div class="col-6">
+					<div class="col-md-6">
 					  	<label for="monsterName">Monster Name</label>
 						<input class="form-control" type="text" id="monsterName" placeholder="${monsterToEdit.monsterName}" th:field="${monsterToEdit.monsterName}" required readonly />
 					</div>
 				</div>
 				<br />
 				<div class="form-row" th:unless="${errorMessage == null}">
-						<div class="col-6 alert alert-danger" role="alert" th:text=${errorMessage}></div>
+						<div class="col-sm-6 alert alert-danger" role="alert" th:text=${errorMessage}></div>
 				</div>
 				<div class="form-row">
-					<div class="col-3">
+					<div class="col-md-3">
 					  	<label for="attack">Attack Power</label>
 						<input class="form-control" type="number" id="attack" placeholder="${monsterToEdit.attack}" th:field="${monsterToEdit.attack}" required />
 					</div>
-					<div class="col-3">
+					<div class="col-md-3">
 					  	<label for="defence">Defense Strength</label>
 						<input class="form-control" type="number" id="defence" placeholder="${monsterToEdit.defence}" th:field="${monsterToEdit.defence}" required />
 					</div>
-					<div class="col-3">
+					<div class="col-md-3">
 						<label for="attackType">Attack Type</label>
 						<select class="form-control" id="type" th:field="${monsterToEdit.attackType}">
 							<option value="physical">physical</option>
@@ -82,7 +82,7 @@
 							<option value="fire">fire</option>
 						</select>
 					</div>
-					<div class="col-3">
+					<div class="col-md-3">
 						<label for="vulnerability">Vulnerability</label>
 						<select class="form-control" id="vulnerability" th:field="${monsterToEdit.vulnerability}">
 							<option value="physical">physical</option>

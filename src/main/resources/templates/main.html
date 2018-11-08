@@ -57,7 +57,7 @@
 					<div class="form-row">
 					<input type="hidden" name="userName" th:value="${myUser}" />
 						
-						<div class="col-3">
+						<div class="col-md-3">
 							<label for="${fight.charName}">Choose Character</label><br />
 							<select class="form-control form-control-lg" id="character" th:field="${fight.charName}">
 								<option th:each="j : ${i.characters}"
@@ -67,7 +67,7 @@
 							</select>
 						</div>
 					
-						<div class="col-6">
+						<div class="col-md-6">
 							<label for="${fight.locationName}">Choose Location</label><br />
 							<select class="form-control form-control-lg" id="location" th:field="${fight.locationName}">
 								<option th:each="j : ${locations}" 
@@ -77,7 +77,7 @@
 							</select>
 						</div>
 		
-						<div class="col-3">
+						<div class="col-md-3">
 							
 							<label for="fight-button">Roll the die!</label><br />
 							<div class="form-row">
@@ -115,31 +115,31 @@
     	<div class="big-holder rounded">
     	<h3>Your Characters</h3>
     	<br />
-        <table class="table table-hover table-light responsive">
+        <table class="table table-hover table-light table-responsive">
             <thead>
               <tr>
-                <th scope="col">Name </th>
-                <th scope="col">Class </th>
-                <th scope="col">Weapon </th>
-                <th scope="col">Attributes </th>
-                <th scope="col">Victories </th>
-				<th scope="col">Defeats </th>
+                <th style="width:25%" scope="col">Name </th>
+                <th style="width:10%" scope="col">Class </th>
+                <th style="width:20%"scope="col">Weapon </th>
+                <th style="width:35%" scope="col">Attributes </th>
+                <th style="width:5%" scope="col">Victories </th>
+				<th style="width:5%" scope="col">Defeats </th>
               </tr>
             </thead>
             <tbody th:each="i : ${users}" th:if="${i.name} == ${#httpServletRequest.remoteUser}">
                 <tr th:each="j : ${i.characters}">
-                    <td style="width:25%">
+                    <td>
                     	<b><span th:text="${j.charName}"></span></b><br /><br />
                     	<span th:text="${j.flavourText}"></span><br /><br />
 						<a th:href="@{/edit/{userName}/{charName}(userName=${i.name},charName=${j.charName})}"><i class="fas fa-edit"></i></a>
                     	<a th:href="@{/delete/{userName}/{charName}(userName=${i.name},charName=${j.charName})}"><i class="fas fa-trash-alt"></i></a>
                     </td>
-                    <td style="width:10%" th:text="${j.type}"></td>                    
-                   	<td style="width:20%" th:each="k : ${weapons}" th:if="${j.weapon} == ${k.weaponName}">
+                    <td th:text="${j.type}"></td>                    
+                   	<td th:each="k : ${weapons}" th:if="${j.weapon} == ${k.weaponName}">
                    		<span th:text="${k.weaponText}"></span><br /><br />
                    		<span th:text="'Power: ' + ${k.power}"></span>
                    	</td>
-                    <td style="width:35%" th:each="k : ${types}" th:if="${j.type} == ${k.typeName}">
+                    <td th:each="k : ${types}" th:if="${j.type} == ${k.typeName}">
                     	<ul class="list-group list-group-flush">
                     		<li class="list-group-item" th:text="'Attack Power: ' + ${k.attack}"></li>
                     		<li class="list-group-item" th:text="'Defense: ' + ${k.defence}"></li>
@@ -148,8 +148,8 @@
                     		<li class="list-group-item" th:text="'Preferred Terrain: ' + ${k.terrain}"></li>
                     	</ul>
                     </td>
-                    <td style="width:5%" th:text="${j.victories}"></td>
-                    <td style="width:5%" th:text="${j.defeats}"></td>
+                    <td th:text="${j.victories}"></td>
+                    <td th:text="${j.defeats}"></td>
                 </tr>
             </tbody>
         </table>

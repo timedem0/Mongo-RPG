@@ -56,22 +56,22 @@
         <br />
 			<form th:object="${newLocation}" th:action="@{/savelocation}" action="#" method="post">	
 				<div class="form-row">
-					<div class="col-4">
+					<div class="col-md-4">
 					  	<label for="name">Location Name</label>
 						<input class="form-control" type="text" id="name" placeholder="" th:field="${newLocation.name}" required />
 					</div>
-					<div class="col-4">
+					<div class="col-md-4">
 					  	<label for="description">Description</label>
 						<input class="form-control" type="text" id="description" placeholder="" th:field="${newLocation.description}" required />
 					</div>
-					<div class="col-4">
+					<div class="col-md-4">
 					  	<label for="picture">Picture Link</label>
 						<input class="form-control" type="text" id="picture" placeholder="" th:field="${newLocation.picture}" required />
 					</div>
 				</div>
 				<br />
 				<div class="form-row" th:unless="${errorMessage == null}">
-						<div class="col-4 alert alert-danger" role="alert" th:text=${errorMessage}></div>
+						<div class="col-sm-4 alert alert-danger" role="alert" th:text=${errorMessage}></div>
 				</div>
 				<div>
 					<a class="btn btn-secondary" href="/admin">Back</a>

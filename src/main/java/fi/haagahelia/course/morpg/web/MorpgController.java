@@ -2,6 +2,7 @@ package fi.haagahelia.course.morpg.web;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -71,8 +72,8 @@ public class MorpgController {
     }
     
     @RequestMapping(value = "/success")
-    public String loginsuccess() {
-        return "forward:/login?success";
+    public String loginSuccess() {
+        return "forward:/login?success"; // return to login to display success message 
     }
     
     @RequestMapping(value = "/saveuser", method = RequestMethod.POST)
@@ -171,18 +172,28 @@ public class MorpgController {
     
     // character edit function
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updateCharacter(String userName, Character charToEdit) {
+    public String updateCharacter(String userName, Character charToEdit, HttpServletRequest request) {
     	
     	userRepoCustom.updateChar(userName, charToEdit);
+    	
+    	// if the call comes from the admin for a non-admin character, return to the admin page
+    	if (request.getRemoteUser().equals("admin") && !userName.equals("admin")) {
+    		return "redirect:admin";
+    	}
     	
     	return "redirect:main";
     }
     
 	// character delete function
     @RequestMapping(value = "/delete/{userName}/{charName}", method = RequestMethod.GET)
-    public String deleteCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName) {
+    public String deleteCharacter(@PathVariable("userName") String userName, @PathVariable("charName") String charName, HttpServletRequest request) {
     	
     	userRepoCustom.deleteChar(userName, charName);
+    	
+    	// if the call comes from the admin for a non-admin character, return to the admin page
+    	if (request.getRemoteUser().equals("admin") && !userName.equals("admin")) {
+    		return "redirect:../../admin#userTable";
+    	}
     	
         return "redirect:../../main";
     }
@@ -191,6 +202,7 @@ public class MorpgController {
     @RequestMapping(value = "/fight", method = RequestMethod.POST)
     public String fight(FightForm newFight, Model model) {
     	
+    	// call the function that does database reference integrity check
     	RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo, locoRepo, locoRepoCustom);
  
     	// get the character that will fight
@@ -220,6 +232,7 @@ public class MorpgController {
 	@RequestMapping(value = "/admin")
     public String adminPage(Model model) {
 		
+		// call the function that does database reference integrity check
 		RefIntegrityCheck.check(userRepo, userRepoCustom, typeRepo, weapRepo, locoRepo, locoRepoCustom);
 		
         model.addAttribute("users", userRepo.findAll());

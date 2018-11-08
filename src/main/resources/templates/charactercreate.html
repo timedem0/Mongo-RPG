@@ -54,14 +54,14 @@
 			<h3>Character Creation</h3>
     		<br />
 			<div class="row">
-			<div class="col-6">
+			<div class="col-md-6">
 				<form th:object="${newChar}" th:with="myUser=${userName}" th:action="@{../save}" action="#" method="post">	
 					<div class="form-row">
-						<div class="col-6">
+						<div class="col-md-6">
 						  	<label for="charName">Character Name</label><br />
 							<input class="form-control" type="text" id="charName" placeholder="" th:field="${newChar.charName}" required />
 						</div>
-						<div class="col-6">
+						<div class="col-md-6">
 							<label for="type">Character Class</label><br />
 							<select id="type" class="form-control" th:field="${newChar.type}">
 								<option th:each="j : ${types}"
@@ -73,7 +73,7 @@
 					</div>
 					<br />
 					<div class="form-row" th:unless="${errorMessage == null}">
-						<div class="col-6 alert alert-danger" role="alert" th:text=${errorMessage}></div>
+						<div class="col-md-6 alert alert-danger" role="alert" th:text=${errorMessage}></div>
 					</div>
 					<div class="form-row">
 						<div class="col-12">
@@ -99,8 +99,9 @@
 					    <button class="btn btn-success" type="submit">Save</button>
 					</div>
 				</form>
+				<br />
 			</div>
-			<div class="col-6">
+			<div class="col-md-6">
 				<span>Read about available Classes</span>
                 <div class="accordion" id="myAccordion">
                     <div class="card" th:each="k : ${types}">

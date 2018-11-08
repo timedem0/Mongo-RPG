@@ -55,13 +55,13 @@
         <h3>List of Locations</h3>
         <br />
         
-        <table class="table table-hover table-light responsive">
+        <table class="table table-hover table-light table-responsive-md">
             <thead>
               <tr>
-                <th scope="col">Name </th>
-                <th scope="col">Description </th>
-                <th scope="col">Image File Name</th>
-                <th scope="col">Monsters Present</th>
+                <th style="width:15%" scope="col">Name </th>
+                <th style="width:35%" scope="col">Description </th>
+                <th style="width:15%" scope="col">Image File Name</th>
+                <th style="width:35%" scope="col">Monsters Present</th>
               </tr>
             </thead>
             <tbody>
@@ -95,15 +95,15 @@
 		<br />
 		
 		<!-- Users Table -->
-    	<div class="big-holder rounded">
+    	<div class="big-holder rounded" id="userTable">
     	<h3>List of Users and their Characters</h3>
     	<br />
         
-	        <table class="table table-hover table-light responsive">
+	        <table class="table table-hover table-light">
 	            <thead>
 	              <tr>
-	                <th scope="col">Name </th>
-	                <th scope="col">Characters </th>
+	                <th style="width:50%" scope="col">Name </th>
+	                <th style="width:50%" scope="col">Characters </th>
 	              </tr>
 	            </thead>
 	            <tbody th:each="i : ${users}">

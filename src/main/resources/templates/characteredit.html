@@ -54,14 +54,14 @@
 			<h3>Character Edit Page</h3>
     		<br />
     		<div class="row">
-			<div class="col-6">
+			<div class="col-md-6">
 				<form th:object="${charToEdit}" th:with="myUser=${userName}" th:action="@{../../update}" action="#" method="post">
 					<div class="form-row">
-						<div class="col-6">
+						<div class="col-md-6">
 						  	<label for="charName">Character Name</label>
 							<input class="form-control readonly" type="text" id="charName" th:placeholder="${charToEdit.charName}" th:field="${charToEdit.charName}" required readonly />
 						</div>
-						<div class="col-6">
+						<div class="col-md-6">
 							<label for="type">Class</label>
 							<select id="type" class="form-control" th:field="${charToEdit.type}">
 								<option th:each="j : ${types}"
@@ -109,8 +109,9 @@
 					    <button class="btn btn-success" type="submit">Save</button>
 					</div>
 				</form>
-			</div>
-			<div class="col-6">
+				<br />
+			</div>	
+			<div class="col-md-6">
 				<span>Read about available Classes</span>
                 <div class="accordion" id="myAccordion">
                     <div class="card" th:each="k : ${types}">

@@ -50,6 +50,41 @@
     	<h1>MORPG</h1>
     	<br/>
     	
+    	<!-- Upload Function -->
+    	<div class="big-holder rounded">
+        <h3>Upload Images</h3>
+        <br />
+        	<p>Only PNG and JPG file formats accepted, maximum size of 2MB, recommended width of 1600 px</p>
+        	<form action="/upload" method="POST" enctype="multipart/form-data">
+        		<div class="form-row">
+					<div class="col-md-2"></div>
+					<div class="col-md-2">
+						<label class="btn btn-warning btn-block" for="my-file-selector">
+						    <input id="my-file-selector" type="file" style="display:none" onchange="$('#upload-file-info').html(this.files[0].name)" name="file" />
+						    Browse
+						</label>
+					</div>
+					<div class="col-md-4">
+						<div class="alert alert-light" id="upload-file-info">&nbsp;</div>
+					</div>
+					<div class="col-md-2">
+						<button class="btn btn-success btn-block" type="submit" value="Save">Upload</button>
+					</div>
+				</div>
+				<br />
+				<div class="form-row" th:unless="${errorMessage == null}">
+					<div class="col-md-3"></div>
+					<div class="col-md-6 alert alert-danger" role="alert" th:text=${errorMessage}></div>
+				</div>
+				<div class="form-row" th:unless="${successMessage == null}">
+					<div class="col-md-3"></div>
+					<div class="col-md-6 alert alert-success" role="alert" th:text=${successMessage}></div>
+				</div>
+			</form>
+        </div>
+        
+        <br />
+    	
         <!-- Location Table -->
     	<div class="big-holder rounded">
         <h3>List of Locations</h3>
@@ -128,7 +163,6 @@
 	        <a class="btn btn-secondary" th:href="@{/main}">Back</a>
 	        
         </div>
-    
     </div>
     
     <footer>

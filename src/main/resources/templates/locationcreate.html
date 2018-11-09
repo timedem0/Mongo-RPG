@@ -65,8 +65,13 @@
 						<input class="form-control" type="text" id="description" placeholder="" th:field="${newLocation.description}" required />
 					</div>
 					<div class="col-md-4">
-					  	<label for="picture">Picture Link</label>
-						<input class="form-control" type="text" id="picture" placeholder="" th:field="${newLocation.picture}" required />
+					  	<label for="picture">Background</label>
+					  	<select class="form-control" id="picUrl" th:field="${newLocation.picture}" required>
+								<option th:each="j : ${files}"
+										th:value="${j}"
+										th:text="${j}">
+								</option>
+						</select>
 					</div>
 				</div>
 				<br />

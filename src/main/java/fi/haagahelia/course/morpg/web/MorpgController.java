@@ -1,5 +1,12 @@
 package fi.haagahelia.course.morpg.web;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +14,9 @@ import javax.validation.Valid;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +25,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import fi.haagahelia.course.morpg.logic.Fight;
@@ -58,7 +70,11 @@ public class MorpgController {
 	@Autowired
 	private LocationRepositoryCustom locoRepoCustom;
 	
+	public static String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/img/";
+	
+	// ***
 	// security and user creation
+	// ***
 	
     @RequestMapping(value = {"/index", "/", "/login"})
     public String login() {	
@@ -105,7 +121,9 @@ public class MorpgController {
     	return "redirect:/success";    	
     }    
     
+    // ***
     // MAIN pages
+    // ***
     
     // character list
 	@RequestMapping(value = "/main")
@@ -226,7 +244,9 @@ public class MorpgController {
     	return "fightresult";
     }
     
+    // ***
     // ADMIN pages
+    // ***   
     
     // main ADMIN page
 	@RequestMapping(value = "/admin")
@@ -254,7 +274,18 @@ public class MorpgController {
 	// location creation page
     @RequestMapping(value = "/newlocation")
     public String addLocation(Model model) {
+    	    	
+    	// get list of files at location and prepare the storage array
+    	File[] files = new File(uploadDir).listFiles();
+    	List<String> fileList = new ArrayList<>();
     	
+    	// for each file in path, truncate the string for the actual file name and extension
+        for (int i = 0; i < files.length; i++) {
+            String fileShort = files[i].toString().substring(uploadDir.length());
+            fileList.add(fileShort);
+        }
+
+    	model.addAttribute("files", fileList);
     	model.addAttribute("newLocation", new Location());
 
         return "locationcreate";
@@ -272,7 +303,7 @@ public class MorpgController {
     		locoRepo.insert(locationToCreate);
     	} else {
 	        ra.addFlashAttribute("errorMessage", "Location already exists");
-			return "redirect:newlocation";		    		
+			return "redirect:newlocation";
     	}
 
     	return "redirect:admin";
@@ -283,6 +314,18 @@ public class MorpgController {
     public String editLocation(@PathVariable("locationName") String locationName, Model model) {
     	
     	Location locationToEdit = locoRepo.findByName(locationName);
+    	
+    	// get list of files at location and prepare the storage array
+    	File[] files = new File(uploadDir).listFiles();
+    	List<String> fileList = new ArrayList<>();
+    	
+    	// for each file in path, truncate the string for the actual file name and extension
+        for (int i = 0; i < files.length; i++) {
+            String fileShort = files[i].toString().substring(uploadDir.length());
+            fileList.add(fileShort);
+        }
+    	
+        model.addAttribute("files", fileList);
     	model.addAttribute("locationToEdit", locationToEdit);
     	   
     	return "locationedit";
@@ -293,6 +336,42 @@ public class MorpgController {
     public String updateLocation(Location locationToEdit) {
     	
     	locoRepoCustom.updateLocation(locationToEdit);
+    	
+    	return "redirect:admin";
+    }
+    
+    // upload image function
+    @RequestMapping("/upload")
+    public String uploadFunction(Model model, @RequestParam("file") MultipartFile file, RedirectAttributes ra) {
+    	
+    	// check if the user forgot to select a file
+    	if (file.getSize() == 0) {
+    		ra.addFlashAttribute("errorMessage", "Please choose a file from your computer first.");
+    		return "redirect:admin";
+    	}
+    	
+    	// check the file size
+    	if (file.getSize() > 1999999) {
+    		ra.addFlashAttribute("errorMessage", "File size too big. Choose a different file or make this one smaller.");
+    		return "redirect:admin";
+    	}
+    	
+    	// check the file format      
+        String[] allowedFormats = new String[] {"image/jpg","image/jpeg","image/png"};
+    	if (!Arrays.asList(allowedFormats).contains(file.getContentType())) {
+    		ra.addFlashAttribute("errorMessage", "Wrong image type. Only PNG and JPG file formats are allowed.");
+    		return "redirect:admin";
+    	}
+    	
+    	// if everything is OK, write the file at path
+    	Path fileNameAndPath = Paths.get(uploadDir, file.getOriginalFilename());
+    	try {
+    		Files.write(fileNameAndPath, file.getBytes());
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+
+    	ra.addFlashAttribute("successMessage", "The file " + file.getOriginalFilename() + " of type " + file.getContentType() + " and size of " + file.getSize() + " was delivered successfully.");
     	
     	return "redirect:admin";
     }
@@ -392,7 +471,9 @@ public class MorpgController {
     	return "documentation-database";
     }
     
+    // ***    
     // RESTful services
+    // ***    
     
     @RequestMapping(value="/restful/users", method = RequestMethod.GET)
     public @ResponseBody List<User> getAllUsers() {
@@ -442,14 +523,16 @@ public class MorpgController {
     	return (List<Weapon>) weapRepo.findAll();
     }
     
-    @RequestMapping(value="/restful/fight/{userName}/{charName}/{locationName}", method = RequestMethod.GET)
-    public @ResponseBody FightResult getFightResults(@PathVariable("userName") String userName, @PathVariable("charName") String charName, @PathVariable("locationName") String locationName) {
+    // RESTful service for getting the fight results
+    @RequestMapping(value="/restful/fight/{userName}/{charName}/{locationName}/{dice}", method = RequestMethod.GET)
+    public @ResponseBody FightResult getFightResults(
+    		@PathVariable("userName") String userName, 
+    		@PathVariable("charName") String charName, 
+    		@PathVariable("locationName") String locationName,
+    		@PathVariable("dice") int dice) {
     	
     	// get the character that will fight
     	Character charToFight = userRepoCustom.findCharByName(userName, charName);
-    	
-    	// simulate a dice roll
-    	int dice = ThreadLocalRandom.current().nextInt(1, 7);
     	
     	// get location, all character types, all weapons and all monsters
     	Location location = locoRepo.findByName(locationName);
@@ -462,11 +545,40 @@ public class MorpgController {
     	
     	return (FightResult) fightResult;
     }
+    
+    // RESTful service for image upload function
+    @RequestMapping(value="/restful-upload", method=RequestMethod.POST, consumes=MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadService(@RequestParam("file") MultipartFile file) throws IOException {
+    	
+    	// check if the user forgot to select a file
+    	if (file.getSize() == 0) {
+    		return new ResponseEntity<>("File at 0 size.", HttpStatus.NOT_ACCEPTABLE);
+    	}
+    	
+    	// check the file size
+    	if (file.getSize() > 1999999) {
+    		return new ResponseEntity<>("File too big.", HttpStatus.NOT_ACCEPTABLE);
+    	}
+    	
+    	// check the file format      
+        String[] allowedFormats = new String[] {"image/jpg","image/jpeg","image/png"};
+    	if (!Arrays.asList(allowedFormats).contains(file.getContentType())) {
+    		return new ResponseEntity<>("File not in accepted format.", HttpStatus.NOT_ACCEPTABLE);
+    	}
+    	
+    	// if everything is OK, write the file at path
+    	Path fileNameAndPath = Paths.get(uploadDir, file.getOriginalFilename());
+    	try {
+    		Files.write(fileNameAndPath, file.getBytes());
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    	}
+    	
+    	return new ResponseEntity<>("File uploaded successfully.", HttpStatus.OK);
+    }
 }
 
+// ***
 // End
 // Tudor Nica, 2018
-
-// Testing purposes ONLY
-// System.out.println("==========New Test:==========");
-// System.out.println("user name = " + userName + ", char name = " + charName);
+// ***

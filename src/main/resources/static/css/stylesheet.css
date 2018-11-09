@@ -118,6 +118,11 @@ input[type=submit] {
 	display: none;
 }
 
+#upload-file-info {
+	font-size: .9em;
+	padding: .5em;
+}
+
 footer {
     color: white;
 }

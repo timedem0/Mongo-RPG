@@ -68,8 +68,13 @@
 						<input class="form-control" type="text" id="description" th:placeholder="${locationToEdit.description}" th:field="${locationToEdit.description}" required />
 					</div>
 					<div class="col-md-4">
-						<label for="picture">Picture URL</label>
-						<input class="form-control" type="text" id="picture" th:placeholder="${locationToEdit.picture}" th:field="${locationToEdit.picture}" required />
+						<label for="picture">Background</label>
+						<select class="form-control" id="picUrl" th:field="${locationToEdit.picture}" required>
+							<option th:each="j : ${files}"
+									th:value="${j}"
+									th:text="${j}">
+							</option>
+						</select>
 					</div>
 				</div>
 				<br /> 

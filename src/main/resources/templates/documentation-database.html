@@ -50,14 +50,27 @@
     	<br/>
     	
     	<div class="admin-holder rounded text-left" style="word-wrap: break-word;">
-		<h3>Database Documentation</h3>
-		
-		<br />
-		
-
-		<div class="text-center">
-			<a class="btn btn-secondary" href="/admin">Back</a>
-		</div>
+			<h3>Database Documentation</h3>
+			
+			<br />
+			<p><i>A database administrator walks into a NoSQL bar, but turns and leaves because he couldn’t find a table.</i></p>
+			<br />
+			
+			<h4>Database Type</h4>
+			<p>This app is using <b><a href="https://www.mongodb.com/" target="_blank">MongoDB</a></b>, a <b>NoSQL</b> database type, which stores data records as BSON documents. BSON is a binary representation of JSON documents.
+			The MORPG database is hosted by the <b><a href="https://mlab.com/" target="_blank">mLab</a></b> cloud services provider.</p>
+			
+			<h4>Database Structure</h4>
+			<p>The general structure and Entity Relationships of MORPG Database can be seen on the image below. A <a href="/docs/morpg_db.pdf" target="_blank">PDF document</a> is also available.
+			The one-to-many relations are handled using both the Embedded (De-normalized) Method as well as the Relational (Normalized) Method, in an attempt test both their strengths.</p>
+			<p>The User document includes the Character sub-document. The Weapon and Type documents are referenced in the Character sub-document. The Location document is referenced in the Type document
+			and it includes the Monster sub-document.</p>
+			
+			<img src="/docs/morpg_er.png" class="img-fluid" alt="Morpg ER Diagram" />
+				
+			<div class="text-center">
+				<a class="btn btn-secondary" href="/admin">Back</a>
+			</div>
 		</div>
 	</div>
 	

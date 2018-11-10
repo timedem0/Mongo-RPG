@@ -5,7 +5,7 @@
 
 	<groupId>fi.haagahelia.course</groupId>
 	<artifactId>Morpg</artifactId>
-	<version>0.5</version>
+	<version>0.6</version>
 	<packaging>jar</packaging>
 
 	<name>Morpg</name>

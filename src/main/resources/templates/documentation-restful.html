@@ -50,88 +50,86 @@
     	<br/>
     	
     	<div class="admin-holder rounded text-left" style="word-wrap: break-word;">
-		<h3>RESTful Documentation</h3>
-		
-		<br />
-		
-		<p>RESTful Services available under ADMIN authority authentication.</p>
-		
-		<br />
-		
-		<h4>Spring Data REST Service with HAL Browser</h4>
-		<ul>
-			<li><a href="/restful/api">/restful/api</a></li>
-		</ul>
-		<p>
-			note 1: Spring Security set to allow POST, PUT, DELETE at this entry point.<br />
-			note 2: This app uses a NoSQL Database. Some referential integrity check is done at app level but proceed with care.<br />
-			eg: Deleting a Type or a Weapon belonging to a character from their respective Collections will trigger the application to create a default Type or Weapon on next access and assign it to the Character whose integrity was broken.
-		</p>
-		
-		<br />
-		
-		<h4>File Upload Service</h4>
-		<ul>
-			<li><a href="/restful-upload">/restful-upload</a></li>
-		</ul>
-		<p>
-			note: Method is POST and key is "file".
-		</p>
-		
-		<br />
-		
-		<h4>Other RESTful Services available as GET-only methods:</h4>
-		
-		<ul>
-			<li><b>/restful/fight/{userName}/{charName}/{locationName}/{dice}</b><br />
-		    eg: <a href="/restful/fight/user/Ellymoo/Forest/5">/restful/fight/user/Ellymoo/Forest/5</a><br />
-		    to get the full parameters for one fight, by user name, character name, location name and dice rolled (int)<br />
-		    note: one monster is always picked randomly from location<br /><br />
-		    </li>	
-		    
-		    <li>/restful/users<br />
-		    eg: <a href="/restful/users">/restful/users</a><br />
-		    to get a list of all users<br /><br />
-		    </li>
-		    
-		    <li>/restful/users/{userName}<br />
-		    eg: <a href="/restful/users/testuser">/restful/users/testuser</a><br />
-		    to get one user by user name<br /><br />
-		    </li>
-		    
-		  	<li>/restful/characters/{userName}<br />
-		    eg: <a href="/restful/characters/testuser">/restful/characters/testuser</a><br />
-		    to get a list of characters belonging to a user, by user name<br /><br />
-		    </li>		  
- 
- 		  	<li>/restful/characters/{userName}/{charName}<br />
-		    eg: <a href="/restful/characters/testuser/Peticel">/restful/characters/testuser/Peticel</a><br />
-		    to get one character belonging to a user, by user name and character name<br /><br />
-		    </li>	   
-
- 		  	<li>/restful/locations<br />
-		    eg: <a href="/restful/locations">/restful/locations</a><br />
-		    to get a list of all locations<br /><br />
-		    </li>	
-
- 		  	<li>/restful/monsters/{locationName}<br />
-		    eg: <a href="/restful/monsters/Ruins">/restful/monsters/Ruins</a><br />
-		    to get a list of all monsters at a location, by location name<br /><br />
-		    </li>	
-
- 		  	<li>/restful/types<br />
-		    eg: <a href="/restful/types">/restful/types</a><br />
-		    to get a list of all character types (classes)<br /><br />
-		    </li>	
-
- 		  	<li>/restful/weapons<br />
-		    eg: <a href="/restful/weapons">/restful/weapons</a><br />
-		    to get a list of all weapons<br /><br />
-		    </li>
-		</ul>
-		<div class="text-center">
-			<a class="btn btn-secondary" href="/admin">Back</a>
-		</div>
+			<h3>RESTful Documentation</h3>
+			
+			<br />
+			<p>RESTful Services available under ADMIN authority authentication.</p>
+			<br />
+			
+			<h4>Spring Data REST Service with HAL Browser</h4>
+			<ul>
+				<li><a href="/restful/api">/restful/api</a></li>
+			</ul>
+			<p>
+				note 1: Spring Security set to allow POST, PUT, DELETE at this entry point.<br />
+				note 2: This app uses a NoSQL Database. Some referential integrity check is done at app level but proceed with care.<br />
+				eg: Deleting a Type or a Weapon belonging to a character from their respective Collections will trigger the application to create a default Type or Weapon on next access and assign it to the Character whose integrity was broken.
+			</p>
+			
+			<br />
+			
+			<h4>File Upload Service</h4>
+			<ul>
+				<li><a href="/restful-upload">/restful-upload</a></li>
+			</ul>
+			<p>
+				note: Method is POST and key is "file".
+			</p>
+			
+			<br />
+			
+			<h4>Other RESTful Services available as GET-only methods:</h4>
+			
+			<ul>
+				<li><b>/restful/fight/{userName}/{charName}/{locationName}/{dice}</b><br />
+			    eg: <a href="/restful/fight/user/Ellymoo/Forest/5">/restful/fight/user/Ellymoo/Forest/5</a><br />
+			    to get the full parameters for one fight, by user name, character name, location name and dice rolled (int)<br />
+			    note: one monster is always picked randomly from location<br /><br />
+			    </li>	
+			    
+			    <li>/restful/users<br />
+			    eg: <a href="/restful/users">/restful/users</a><br />
+			    to get a list of all users<br /><br />
+			    </li>
+			    
+			    <li>/restful/users/{userName}<br />
+			    eg: <a href="/restful/users/testuser">/restful/users/testuser</a><br />
+			    to get one user by user name<br /><br />
+			    </li>
+			    
+			  	<li>/restful/characters/{userName}<br />
+			    eg: <a href="/restful/characters/testuser">/restful/characters/testuser</a><br />
+			    to get a list of characters belonging to a user, by user name<br /><br />
+			    </li>		  
+	 
+	 		  	<li>/restful/characters/{userName}/{charName}<br />
+			    eg: <a href="/restful/characters/testuser/Peticel">/restful/characters/testuser/Peticel</a><br />
+			    to get one character belonging to a user, by user name and character name<br /><br />
+			    </li>	   
+	
+	 		  	<li>/restful/locations<br />
+			    eg: <a href="/restful/locations">/restful/locations</a><br />
+			    to get a list of all locations<br /><br />
+			    </li>	
+	
+	 		  	<li>/restful/monsters/{locationName}<br />
+			    eg: <a href="/restful/monsters/Ruins">/restful/monsters/Ruins</a><br />
+			    to get a list of all monsters at a location, by location name<br /><br />
+			    </li>	
+	
+	 		  	<li>/restful/types<br />
+			    eg: <a href="/restful/types">/restful/types</a><br />
+			    to get a list of all character types (classes)<br /><br />
+			    </li>	
+	
+	 		  	<li>/restful/weapons<br />
+			    eg: <a href="/restful/weapons">/restful/weapons</a><br />
+			    to get a list of all weapons<br /><br />
+			    </li>
+			</ul>
+			<div class="text-center">
+				<a class="btn btn-secondary" href="/admin">Back</a>
+			</div>
 		</div>
 	</div>
 	

@@ -106,17 +106,17 @@ public class Fight {
 		switch (charAttackType) {
 	        case "fire":
 	        	if (monsterVulnerability.equals("fire")) {
-	        		bonusFromAttack = 5;
+	        		bonusFromAttack = 10;
 	        	};
 	            break;
 	        case "nature":
 	        	if (monsterVulnerability.equals("nature")) {
-	        		bonusFromAttack = 5;
+	        		bonusFromAttack = 10;
 	        	};
 	            break;
 	        case "physical":
 	        	if (monsterVulnerability.equals("physical")) {
-	        		bonusFromAttack = 5;
+	        		bonusFromAttack = 10;
 	        	};
 	            break;
 	        default:
@@ -126,17 +126,17 @@ public class Fight {
 		switch (monsterAttackType) {
 	        case "fire":
 	        	if (charVulnerability.equals("fire")) {
-	        		penaltyFromMonsterAttack = 5;
+	        		penaltyFromMonsterAttack = 10;
 	        	};
 	            break;
 	        case "nature":
 	        	if (charVulnerability.equals("nature")) {
-	        		penaltyFromMonsterAttack = 5;
+	        		penaltyFromMonsterAttack = 10;
 	        	};
 	            break;
 	        case "physical":
 	        	if (charVulnerability.equals("physical")) {
-	        		penaltyFromMonsterAttack = 5;
+	        		penaltyFromMonsterAttack = 10;
 	        	};
 	            break;
 	        default:

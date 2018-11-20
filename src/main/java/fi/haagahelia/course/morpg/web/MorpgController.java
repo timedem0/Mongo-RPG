@@ -1,10 +1,6 @@
 package fi.haagahelia.course.morpg.web;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +8,9 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.concurrent.ThreadLocalRandom;
+
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -29,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.util.Base64Utils;
 
 import fi.haagahelia.course.morpg.logic.Fight;
 import fi.haagahelia.course.morpg.logic.FightForm;
@@ -48,6 +48,12 @@ import fi.haagahelia.course.morpg.domain.RefIntegrityCheck;
 import fi.haagahelia.course.morpg.domain.Location;
 import fi.haagahelia.course.morpg.domain.LocationRepository;
 import fi.haagahelia.course.morpg.domain.LocationRepositoryCustom;
+import fi.haagahelia.course.morpg.domain.FileUpload;
+import fi.haagahelia.course.morpg.domain.FileName;
+import fi.haagahelia.course.morpg.domain.FileNameRepository;
+
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.BasicQuery;
 
 @Controller
 public class MorpgController {
@@ -69,6 +75,12 @@ public class MorpgController {
 	
 	@Autowired
 	private LocationRepositoryCustom locoRepoCustom;
+	
+	@Autowired
+	private FileNameRepository fileRepo;
+	
+	@Autowired
+    MongoTemplate mongoTemplate;
 	
 	public static String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/img/";
 	
@@ -238,7 +250,14 @@ public class MorpgController {
     	// update the character statistics
     	userRepoCustom.updateCharStats(fightResult.getUserName(), fightResult.getCharacter(), fightResult.getVictoriesUpdate(), fightResult.getDefeatsUpdate());
     	
-    	// preparing the fight result object for display
+    	// retrieve the background image object from the database
+        FileUpload imageObject = mongoTemplate.findOne(new BasicQuery("{name : \"" + location.getPicture() + "\"}"), FileUpload.class);
+        
+        // re-compose the image from its binary storage form and prepare it for display
+        String image = "data:" + imageObject.getType() + ";base64," + Base64Utils.encodeToString(imageObject.getFile().getData());
+        model.addAttribute("image", image);
+    	
+    	// prepare the fight result object for display
     	model.addAttribute("result", fightResult);
 
     	return "fightresult";
@@ -275,16 +294,9 @@ public class MorpgController {
     @RequestMapping(value = "/newlocation")
     public String addLocation(Model model) {
     	    	
-    	// get list of files at location and prepare the storage array
-    	File[] files = new File(uploadDir).listFiles();
-    	List<String> fileList = new ArrayList<>();
-    	
-    	// for each file in path, truncate the string for the actual file name and extension
-        for (int i = 0; i < files.length; i++) {
-            String fileShort = files[i].toString().substring(uploadDir.length());
-            fileList.add(fileShort);
-        }
-
+    	// get list of files from the database using the FileName document
+    	List<FileName> fileList = fileRepo.findAll();
+	    
     	model.addAttribute("files", fileList);
     	model.addAttribute("newLocation", new Location());
 
@@ -315,15 +327,8 @@ public class MorpgController {
     	
     	Location locationToEdit = locoRepo.findByName(locationName);
     	
-    	// get list of files at location and prepare the storage array
-    	File[] files = new File(uploadDir).listFiles();
-    	List<String> fileList = new ArrayList<>();
-    	
-    	// for each file in path, truncate the string for the actual file name and extension
-        for (int i = 0; i < files.length; i++) {
-            String fileShort = files[i].toString().substring(uploadDir.length());
-            fileList.add(fileShort);
-        }
+    	// get list of files from the database using the FileName document
+    	List<FileName> fileList = fileRepo.findAll();
     	
         model.addAttribute("files", fileList);
     	model.addAttribute("locationToEdit", locationToEdit);
@@ -342,8 +347,8 @@ public class MorpgController {
     
     // upload image function
     @RequestMapping("/upload")
-    public String uploadFunction(Model model, @RequestParam("file") MultipartFile file, RedirectAttributes ra) {
-    	
+    public String uploadFunction(@RequestParam("file") MultipartFile file, RedirectAttributes ra) {
+            	  	
     	// check if the user forgot to select a file
     	if (file.getSize() == 0) {
     		ra.addFlashAttribute("errorMessage", "Please choose a file from your computer first.");
@@ -363,17 +368,40 @@ public class MorpgController {
     		return "redirect:admin";
     	}
     	
-    	// if everything is OK, write the file at path
-    	Path fileNameAndPath = Paths.get(uploadDir, file.getOriginalFilename());
-    	try {
-    		Files.write(fileNameAndPath, file.getBytes());
-    	} catch (IOException e) {
-    		e.printStackTrace();
+    	// get list of files from the database using the FileName document
+    	List<FileName> fileList = fileRepo.findAll();
+    	List<String> fileNamesList = new ArrayList<>();
+    	for (FileName i : fileList) {
+    		fileNamesList.add(i.getName());
     	}
-
-    	ra.addFlashAttribute("successMessage", "The file " + file.getOriginalFilename() + " of type " + file.getContentType() + " and size of " + file.getSize() + " was delivered successfully.");
     	
-    	return "redirect:admin";
+    	// check if there is already a file with the same name
+    	if (fileNamesList.contains(file.getOriginalFilename())) {
+    		ra.addFlashAttribute("errorMessage", "File already exists in the database. Change the file name.");
+    		return "redirect:admin";
+    	}
+    	
+    	// if everything is OK,
+    	// write the file name to FileName document
+    	// and the actual file to FileUploads document
+    	// to enhance performance in Location Create and Edit functions
+        try {
+        	FileName fileToUploadName = new FileName();
+        	fileToUploadName.setName(file.getOriginalFilename());
+        	mongoTemplate.insert(fileToUploadName);
+            FileUpload fileToUpload = new FileUpload();
+            fileToUpload.setName(file.getOriginalFilename());
+            fileToUpload.setType(file.getContentType());
+            fileToUpload.setFile(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+            mongoTemplate.insert(fileToUpload);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "failure";
+        }
+
+    	ra.addFlashAttribute("successMessage", "The file " + file.getOriginalFilename() + " of type " + file.getContentType() + " and size of " + file.getSize() + " bytes was uploaded successfully.");
+    	
+    	return "redirect:admin";   	
     }
     
 	// location delete function
@@ -566,14 +594,33 @@ public class MorpgController {
     		return new ResponseEntity<>("File not in accepted format.", HttpStatus.NOT_ACCEPTABLE);
     	}
     	
-    	// if everything is OK, write the file at path
-    	Path fileNameAndPath = Paths.get(uploadDir, file.getOriginalFilename());
-    	try {
-    		Files.write(fileNameAndPath, file.getBytes());
-    	} catch (IOException e) {
-    		e.printStackTrace();
+    	// get list of files from the database using the FileName document
+    	List<FileName> fileList = fileRepo.findAll();
+    	List<String> fileNamesList = new ArrayList<>();
+    	for (FileName i : fileList) {
+    		fileNamesList.add(i.getName());
     	}
     	
+    	// check if there is already a file with the same name
+    	if (fileNamesList.contains(file.getOriginalFilename())) {
+    		return new ResponseEntity<>("File already exists.", HttpStatus.NOT_ACCEPTABLE);
+    	}
+    	
+    	// if everything is OK, write the file and the file name to their respective documents
+        try {
+        	FileName fileToUploadName = new FileName();
+        	fileToUploadName.setName(file.getOriginalFilename());
+        	mongoTemplate.insert(fileToUploadName);
+            FileUpload fileToUpload = new FileUpload();
+            fileToUpload.setName(file.getOriginalFilename());
+            fileToUpload.setType(file.getContentType());
+            fileToUpload.setFile(new Binary(BsonBinarySubType.BINARY, file.getBytes()));
+            mongoTemplate.insert(fileToUpload);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>("Upload failure.", HttpStatus.NOT_ACCEPTABLE);
+        }
+    	    	
     	return new ResponseEntity<>("File uploaded successfully.", HttpStatus.OK);
     }
 }

@@ -71,8 +71,8 @@
 						<label for="picture">Background</label>
 						<select class="form-control" id="picUrl" th:field="${locationToEdit.picture}" required>
 							<option th:each="j : ${files}"
-									th:value="${j}"
-									th:text="${j}">
+									th:value="${j.name}"
+									th:text="${j.name}">
 							</option>
 						</select>
 					</div>

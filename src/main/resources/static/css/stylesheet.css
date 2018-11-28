@@ -21,6 +21,11 @@ h2, h3 {
 	text-align: center;
 }
 
+.documentation {
+	font-family: 'Open Sans', sans-serif;
+	color: black;
+}
+
 .navbar {
     background: rgba(0, 0, 0, 0.6);
 }

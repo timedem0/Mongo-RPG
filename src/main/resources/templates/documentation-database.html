@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gabriela%7CShojumaru" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gabriela%7CShojumaru%7COpen+Sans" />
     <link rel="stylesheet" href="/css/stylesheet.css" />
 </head>
 
@@ -49,24 +49,40 @@
     	<h1>MORPG</h1>
     	<br/>
     	
-    	<div class="admin-holder rounded text-left" style="word-wrap: break-word;">
+    	<div class="admin-holder rounded text-left documentation" style="word-wrap: break-word;">
 			<h3>Database Documentation</h3>
 			
 			<br />
-			<p><i>A database administrator walks into a NoSQL bar, but turns and leaves because he couldn’t find a table.</i></p>
+			<p class="text-center"><i>A database administrator walks into a NoSQL bar, but leaves immediately because he couldn’t find a table.</i></p>
 			<br />
 			
+			<h4>Source Code</h4>
+			<p>This is a school project written in Java. Its source code is <a href="https://github.com/timedem0/Mongo-RPG" target="_blank">available on Github</a>.</p>
+			
 			<h4>Database Type</h4>
-			<p>This app is using <b><a href="https://www.mongodb.com/" target="_blank">MongoDB</a></b>, a <b>NoSQL</b> database type, which stores data records as BSON documents. BSON is a binary representation of JSON documents.
+			<p>The app is using <b><a href="https://www.mongodb.com/" target="_blank">MongoDB</a></b>, a free and open-source <b>NoSQL</b> database type,
+			which stores data in flexible, JSON-like documents, meaning fields can vary from document to document and data structure can be changed over time. 
 			The MORPG database is hosted by the <b><a href="https://mlab.com/" target="_blank">mLab</a></b> cloud services provider.</p>
+
+			<h4>Queries</h4>
+			<p>At application level, the basic queries (eg: find all users) are done using the <a href="https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/repository/MongoRepository.html" target="_blank">MongoRepository</a>, 
+			while the more complex ones (eg: find character by user name and character name and update victory field) 
+			are carried through the use of <a href="https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html" target="_blank">MongoTemplate.</a></p>			
+			
+			<h4>A Note on File Uploading</h4>
+			<p>The files are uploaded and stored directly in the database itself. <b>MongoDB</b> represents JSON documents in binary-encoded format called <b>BSON</b>. 
+			BSON extends the JSON model to provide additional data types, ordered fields, and to be efficient for encoding and decoding within different languages.
+			(<a href="https://www.mongodb.com/json-and-bson" target="_blank">source</a>)</p>
+			<p>To enhance performance on some queries, I created a collection that stores the files themselves, and then a separate collection that stores just the file names. This way, the application can perform
+			queries on the smaller collection and then retrieve and decode a single image file (with a findOne type of query), from the main file collection.</p>
 			
 			<h4>Database Structure</h4>
 			<p>The general structure and Entity Relationships of MORPG Database can be seen on the image below. A <a href="/docs/morpg_db.pdf" target="_blank">PDF document</a> is also available.
 			The one-to-many relations are handled using both the Embedded (De-normalized) Method as well as the Relational (Normalized) Method, in an attempt test both their strengths.</p>
-			<p>The User document includes the Character sub-document. The Weapon and Type documents are referenced in the Character sub-document. The Location document is referenced in the Type document
+			<p>The Users collection includes the Character sub-document. The Weapon and Type collections are referenced in the Character sub-document. The Location collection is referenced in the Type collection
 			and it includes the Monster sub-document.</p>
 			
-			<img src="/docs/morpg_er.png" class="img-fluid" alt="Morpg ER Diagram" />
+			<img src="/docs/morpg_er.png" class="img-fluid text-middle" alt="Morpg ER Diagram" />
 				
 			<div class="text-center">
 				<a class="btn btn-secondary" href="/admin">Back</a>

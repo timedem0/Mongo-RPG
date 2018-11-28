@@ -399,7 +399,9 @@ public class MorpgController {
             return "failure";
         }
 
-    	ra.addFlashAttribute("successMessage", "The file " + file.getOriginalFilename() + " of type " + file.getContentType() + " and size of " + file.getSize() + " bytes was uploaded successfully.");
+    	ra.addFlashAttribute("successMessage",
+    			"The file " + file.getOriginalFilename() + " of type " + file.getContentType() + " and size of " + file.getSize() + " bytes was uploaded successfully."
+    			+ " You can select the uploaded image from the drop-down menu in the Create/Edit Location pages.");
     	
     	return "redirect:admin";   	
     }
